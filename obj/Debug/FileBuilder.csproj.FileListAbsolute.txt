@@ -4,3 +4,9 @@ C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\bin\Debug\FileBui
 C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\bin\Debug\FileBuilder.pdb
 C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileBuilder.dll
 C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileBuilder.pdb
+C:\Projetos\libs\csharp\FileBuilder\bin\Debug\FileBuilder.dll
+C:\Projetos\libs\csharp\FileBuilder\bin\Debug\FileBuilder.pdb
+C:\Projetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.csproj.AssemblyReference.cache
+C:\Projetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.csproj.CoreCompileInputs.cache
+C:\Projetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.dll
+C:\Projetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.pdb

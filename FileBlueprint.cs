@@ -17,6 +17,7 @@ namespace FileBuilder
 
             // checks if file already exists
             IsFileBuilded = File.Exists(Path);
+            unbuildLocation = location;
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
@@ -35,6 +36,7 @@ namespace FileBuilder
 
             // checks if file already exists
             IsFileBuilded = File.Exists(Path);
+            unbuildLocation = location;
         }
 
       
