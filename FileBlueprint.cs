@@ -17,10 +17,8 @@ namespace FileBuilder
             this.Location = location;
             this.Name = name;
             this.Extention = extention;
-
-            // checks if file already exists
-            IsFileBuilded = File.Exists(Path);
-            unbuildLocation = location;
+            this.unbuildLocation = location;
+            CheckIfFileAlreadyExistsAndUpdateThisBlueprint(); 
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
@@ -32,10 +30,8 @@ namespace FileBuilder
             this.Location = folder.ToLocationString();
             this.Name = name;
             this.Extention = extention;
-
-            // checks if file already exists
-            IsFileBuilded = File.Exists(Path);
-            unbuildLocation = location;
+            this.unbuildLocation = location;
+            CheckIfFileAlreadyExistsAndUpdateThisBlueprint();
         }
 
         #endregion =======================================================================================
@@ -101,6 +97,19 @@ namespace FileBuilder
                 default: this.fileExtentionText = ""; break;
             }
         }
+        private void CheckIfFileAlreadyExistsAndUpdateThisBlueprint()
+        {
+            if (File.Exists(this.Path))
+            {
+                // filling the object content with the real file content
+                StreamReader fileReader = new StreamReader(this.Path);
+                string fileContent = fileReader.ReadToEnd();
+                this.AddContent(fileContent);
+                
+                //saying to the algorithm that the file is already built
+                this.IsFileBuilded = true;      
+            }
+        }
         #endregion =======================================================================================
 
 
@@ -121,7 +130,6 @@ namespace FileBuilder
         }
 
         /// <summary> Makes Content property empty. </summary>
-        /// <param name="content">The content string line to be added.</param>
         public void ClearContent() => Content = "";
 
 
