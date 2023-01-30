@@ -22,7 +22,7 @@ namespace FileBuilder
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
-        /// <param name="folder">The SpecialFolder enum value containing the path that the real file will be created in.</param>
+        /// <param name="folder">The Folder enum value containing the path that the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
         public FileBlueprint(Folder folder, string name, Extention extention)

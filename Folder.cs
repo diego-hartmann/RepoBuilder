@@ -35,7 +35,7 @@ namespace FileBuilder
         /// <returns>Valid path string.</returns>
         public static string ToLocationString(this Folder folder) {
             // getting environment namespace enum folder value through our custom enum by convertion
-            Environment.SpecialFolder convertedEnumValue = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), folder.ToString());
+            Environment.Folder convertedEnumValue = (Environment.Folder)Enum.Parse(typeof(Environment.Folder), folder.ToString());
             // getting path string through this converted enum value
             return Environment.GetFolderPath(convertedEnumValue);
         }
