@@ -14,6 +14,9 @@ namespace FileBuilder
             this.Location = location;
             this.Name = name;
             this.Extention = extention;
+
+            // checks if file already exists
+            IsFileBuilded = File.Exists(Path);
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
@@ -29,6 +32,9 @@ namespace FileBuilder
             Environment.SpecialFolder convertedEnumValue = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), specialFolder.ToString());
             // getting path string through this enum value
             this.Location = Environment.GetFolderPath(convertedEnumValue);
+
+            // checks if file already exists
+            IsFileBuilded = File.Exists(Path);
         }
 
       
