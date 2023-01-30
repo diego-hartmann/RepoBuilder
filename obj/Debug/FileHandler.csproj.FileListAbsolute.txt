@@ -1,0 +1,6 @@
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\bin\Debug\FileHandler.dll
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\bin\Debug\FileHandler.pdb
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileHandler.csproj.AssemblyReference.cache
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileHandler.csproj.CoreCompileInputs.cache
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileHandler.dll
+C:\Users\Diego Hartmann\source\repos\CSharpProject\FileHandler\obj\Debug\FileHandler.pdb
