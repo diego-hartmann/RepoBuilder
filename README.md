@@ -13,7 +13,7 @@ using FileBuilder;
 
 ## 3. FileBlueprint type
 The blueprint is just an object containing data and methods to create or update a real file. 
-
+It is a virtual file that can be edited before being really created into your local machine.
 - Create the blueprint of the file using the FileBlueprint constructor. 
 ```cs
 FileBlueprint fileBP = new FileBlueprint("c:/users/username/desktop", "MyFileName", Extention.JavaScript);
