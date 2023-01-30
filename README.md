@@ -3,7 +3,7 @@ C# library for creating files with a high level of abstraction and security. Use
 
 [DOWNLOAD HERE](https://github.com/dieg0hartmann/FileBuilder/blob/main/bin/Debug/FileBuilder.dll) the .dll and import it into your projects!
 
-```
+```cs
 // import the namespace
 using FileBuilder;
 
