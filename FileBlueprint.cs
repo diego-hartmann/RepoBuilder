@@ -1,10 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace FileBuilder
 {
     public class FileBlueprint
     {
+
+        #region =========== CONSTRUCTORS ===============================================================
+
+
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
@@ -21,26 +24,21 @@ namespace FileBuilder
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
-        /// <param name="specialFolder">The SpecialFolder enum value containing the path that the real file will be created in.</param>
+        /// <param name="folder">The SpecialFolder enum value containing the path that the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
-        public FileBlueprint(SpecialFolder specialFolder, string name, Extention extention)
+        public FileBlueprint(Folder folder, string name, Extention extention)
         {
+            this.Location = folder.ToLocationString();
             this.Name = name;
             this.Extention = extention;
-
-            // getting environment namespace enum folder value through our custom enum by convertion
-            Environment.SpecialFolder convertedEnumValue = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), specialFolder.ToString());
-            // getting path string through this enum value
-            this.Location = Environment.GetFolderPath(convertedEnumValue);
 
             // checks if file already exists
             IsFileBuilded = File.Exists(Path);
             unbuildLocation = location;
         }
 
-      
-
+        #endregion =======================================================================================
 
 
         #region =========== PRIVATE FIELDS ===============================================================
@@ -52,9 +50,7 @@ namespace FileBuilder
         #endregion =======================================================================================
 
 
-
-
-        #region =========== PUBLIC PROPERTIES FIELDS =====================================================
+        #region =========== PUBLIC PROPERTIES ====================================================
 
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; private set; }
@@ -89,7 +85,7 @@ namespace FileBuilder
         /// <summary> The content inside the file (readonly). </summary>
         public string Content { get; private set; } = "";
 
-        #endregion =======================================================================================
+        #endregion ===============================================================================================
 
 
         #region =========== PRIVATE METHODS ==============================================================

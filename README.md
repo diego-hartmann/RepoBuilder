@@ -11,36 +11,38 @@ static class Program {
     static void Main()
     {
 
-        // Create the blueprint of the file using the FileBlueprint constructor.
+               // ========= BLUEPRINT OBJECT =================================================================================================
+        
+        // --- The blueprint is just an object containing data and methos to create or update a real file. 
+        // --- Create the blueprint of the file using the FileBlueprint constructor. 
         FileBlueprint fileBP = new FileBlueprint("c:/users/username/desktop", "MyFileName", Extention.JavaScript);
-            
-        
-        // In the first parameter, you can pass a SpecialFolder enum preset value as well, instead of the path string. 
-        FileBlueprint fileBP = new FileBlueprint(SpecialFolder.Desktop, "MyFileName", Extention.JavaScript);
+        // --- Or, in the first parameter, you can pass a Folder enum value, instead of the path string. It will be converted to string later.
+        FileBlueprint fileBP = new FileBlueprint(Folder.Desktop, "MyFileName", Extention.JavaScript);
 
+
+
+        // ========= MODIFYING BLUEPRINT ===============================================================================================
         
-        // Add content into your file.
+        // --- Modify the blueprint object using its methods and public properties.
         fileBP.AddContentLine("const app = data => console.log(data);");
         fileBP.AddContentLine("app();");
+        fileBP.Location = Folder.Favorites.ToLocationString(); // or simple string -> "c:/users/username/favourites"
 
+
+
+        // === MOUNTING THE REAL FILE ==================================================================================================
         
-        // You can create a real file using the Build method from the blueprint object.
+        // --- You create (or rewrite) the real file using the Build method. It saves the blueprint changes into the real file.
         fileBP.Build();
-
-        
-        // You can edit the blueprint after the real file has been builded anyways...
-        fileBP.AddContentLine("const app = () => console.log('arquivo');");
-        // ... and even change its path ...
-        fileBP.Location = "c:/users/username/desktop/yourFolder";
-        // ...because the Build method will rewrite the real file based on those changes.
-        fileBP.Build();
-
-
-        // You can delete the real file with the Unbuild method.
+        // --- You delete the real file using the Unbuild method.
         fileBP.Unbuild();
 
-        
-        // But you will always have the file blueprint object to edit and build whenever you want [fileBP].
+
+        // === UPDATING REAL FILE ======================================================================================================
+
+        // -- Just call the Build method whenever you want to, so it saves the new changes into the existing file.
+        fileBP.ClearContent();
+        fileBP.Build();
 
     }
 }
