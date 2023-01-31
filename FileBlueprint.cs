@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace FileBuilder
 {
@@ -114,6 +115,7 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC METHODS ===============================================================
+
 
         /// <summary> Adds text to the Content property. </summary>
         /// <param name="content">The content string to be added.</param>
