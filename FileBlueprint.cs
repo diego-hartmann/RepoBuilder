@@ -42,8 +42,14 @@ namespace FileBuilder
         private string location;
         private Extention extention;
         private string fileExtentionText;
+        
+        // these three data hold the last saved information to correctly unbuild the old version of the file through its old Path (UnbuildPath bellow).
+        // they will be updated into the Build method as the last path version saved.
         private string unbuildLocation;
-        private string UnbuildPath => $"{unbuildLocation}/{Name}.{fileExtentionText}";
+        private string unbuildName;
+        private string unbuildFileExtentionText;
+        // called on Unbuild method;
+        private string UnbuildPath => $"{unbuildLocation}/{unbuildName}.{unbuildFileExtentionText}";
         #endregion =======================================================================================
 
 
@@ -138,7 +144,12 @@ namespace FileBuilder
         /// <summary> Creates the real file or updates the existing one. </summary>
         public void Build() {
             Unbuild();
-            unbuildLocation = location;
+            
+            // updating the UnbuildPath property through the three fields that compose it.  
+            this.unbuildLocation = this.Location;
+            this.unbuildName = this.Name;
+            this.unbuildFileExtentionText = this.fileExtentionText;
+            
             StreamWriter writer = new StreamWriter(Path, false);
             writer.Write(Content);
             writer.Close();
@@ -149,6 +160,7 @@ namespace FileBuilder
         /// <param name="fileBlueprint">The blueprint of the real file to be deleted.</param>
         public void Unbuild() {
             if (!IsFileBuilded) return;
+            // using the update UnbuildPath to delete the last version of the file
             File.Delete(UnbuildPath);
             IsFileBuilded = false;
         }
