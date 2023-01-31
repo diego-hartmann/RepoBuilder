@@ -60,3 +60,22 @@ You unmount the real file through the Unbuild method.
 ```cs
 fileBP.Unbuild();
 ```
+
+## 8. Cloning blueprint objects
+GetCopy method is a quick way to create a new blueprint.
+- Adds a copy number after the original name ("MyFileName_1").
+```cs
+FileBlueprint fileBPCopy = fileBP.GetCopy();
+```
+- But you can change the Name property later anyways, just like any other one.
+```cs
+fileBPCopy.Name = "NewName";
+fileBPCopy.ClearContent();
+fileBPCopy.AddContentLine("I am a copy!");
+fileBPCopy.Build();
+```
+- If you delete the original blueprint, the copy will not be affected.
+```cs
+fileBP.Unbuild();
+Console.Write(fileBPCopy.Content);
+```
