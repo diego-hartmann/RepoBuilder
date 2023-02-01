@@ -4,19 +4,16 @@ namespace FileBuilder
 {
     public class FileBlueprint
     {
-
+     
         #region =========== CONSTRUCTORS ===============================================================
+
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
         public FileBlueprint(string location, string name, Extention extention)
         {
-            this.Location = location;
-            this.Name = name;
-            this.Extention = extention;
-            this.unbuildLocation = location;
-            UpdateThisBlueprintIfFileAlreadyExists(); 
+            this.FileBlueprintConstructor(location, name, extention);
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
@@ -25,12 +22,9 @@ namespace FileBuilder
         /// <param name="extention">The extention of the file.</param>
         public FileBlueprint(Folder folder, string name, Extention extention)
         {
-            this.Location = folder.ToLocationString();
-            this.Name = name;
-            this.Extention = extention;
-            this.unbuildLocation = location;
-            UpdateThisBlueprintIfFileAlreadyExists();
+            this.FileBlueprintConstructor(folder.ToLocationString(), name, extention);
         }
+
         #endregion =======================================================================================
 
 
@@ -50,6 +44,7 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC PROPERTIES ====================================================
+
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; private set; }
 
@@ -73,7 +68,7 @@ namespace FileBuilder
             set
             {
                 extention = value;
-                this.fileExtentionText = Extention.ToExtentionString();
+                fileExtentionText = extention.ToExtentionString();
             }
         }
 
@@ -81,28 +76,45 @@ namespace FileBuilder
         public string Path => $"{Location}/{Name}.{fileExtentionText}";
 
         /// <summary> The content inside the file (readonly). </summary>
-        public string Content { get; private set; } = "";
+        public string Content { get; private set; } = string.Empty;
+
         #endregion ===============================================================================================
 
 
         #region =========== PRIVATE METHODS ==============================================================
-        private void UpdateThisBlueprintIfFileAlreadyExists()
+        private void FileBlueprintConstructor(string location, string name, Extention extention)
+        {
+            this.Location = location;
+            this.Name = name;
+            this.Extention = extention;
+            this.unbuildLocation = location;
+            this.unbuildName = name;
+            this.unbuildFileExtentionText = extention.ToExtentionString();
+            CheckIfFileAlreadyExistsAndUpdateThisBlueprint();
+        }
+        private void CheckIfFileAlreadyExistsAndUpdateThisBlueprint()
         {
             if (File.Exists(this.Path))
             {
-                // filling the object content with the real file content
+                // gettingthe the real file content
                 StreamReader fileReader = new StreamReader(this.Path);
                 string fileContent = fileReader.ReadToEnd();
+                fileReader.Close();
+                
+                // filling the object content with the real file content
                 this.AddContent(fileContent);
                 
                 //saying to the algorithm that the file is already built
-                this.IsFileBuilded = true;      
+                this.IsFileBuilded = true;
+
             }
         }
         #endregion =======================================================================================
 
 
         #region =========== PUBLIC METHODS ===============================================================
+
+
         /// <summary> Adds text to the Content property. </summary>
         /// <param name="content">The content string to be added.</param>
         public void AddContent(string content) => Content += content;
@@ -119,6 +131,7 @@ namespace FileBuilder
 
         /// <summary> Makes Content property empty. </summary>
         public void ClearContent() => Content = "";
+
 
         /// <summary> Creates the real file or updates the existing one. </summary>
         public void Build() {
@@ -153,6 +166,8 @@ namespace FileBuilder
             duplication.AddContent(Content);
             return duplication;
         }
+
         #endregion =======================================================================================
+
     }
 }
