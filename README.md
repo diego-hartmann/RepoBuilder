@@ -32,7 +32,7 @@ fileBP.AddContentLine("const app = data => console.log(data);");
 fileBP.AddContentLine("app();");
 ``` 
 ```cs
-fileBP.Location = "c:/users/username/favourites";
+fileBP.Location = "c:/users/username/favorites";
 ```
 ```cs
 fileBP.Location = Folder.Favorites.ToLocationString();
