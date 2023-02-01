@@ -6,8 +6,6 @@ namespace FileBuilder
     {
 
         #region =========== CONSTRUCTORS ===============================================================
-
-
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
@@ -18,7 +16,7 @@ namespace FileBuilder
             this.Name = name;
             this.Extention = extention;
             this.unbuildLocation = location;
-            CheckIfFileAlreadyExistsAndUpdateThisBlueprint(); 
+            UpdateThisBlueprintIfFileAlreadyExists(); 
         }
 
         /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
@@ -31,9 +29,8 @@ namespace FileBuilder
             this.Name = name;
             this.Extention = extention;
             this.unbuildLocation = location;
-            CheckIfFileAlreadyExistsAndUpdateThisBlueprint();
+            UpdateThisBlueprintIfFileAlreadyExists();
         }
-
         #endregion =======================================================================================
 
 
@@ -53,7 +50,6 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC PROPERTIES ====================================================
-
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; private set; }
 
@@ -77,7 +73,7 @@ namespace FileBuilder
             set
             {
                 extention = value;
-                SetFileExtentionTextBasedOnEnum(value);
+                this.fileExtentionText = Extention.ToExtentionString();
             }
         }
 
@@ -86,24 +82,11 @@ namespace FileBuilder
 
         /// <summary> The content inside the file (readonly). </summary>
         public string Content { get; private set; } = "";
-
         #endregion ===============================================================================================
 
 
         #region =========== PRIVATE METHODS ==============================================================
-        private void SetFileExtentionTextBasedOnEnum(Extention value) {
-            switch (value) {
-                case Extention.CSharp: this.fileExtentionText = "cs"; break;
-                case Extention.HTML: this.fileExtentionText = "html"; break;
-                case Extention.CSS: this.fileExtentionText = "css"; break;
-                case Extention.JavaScript: this.fileExtentionText = "js"; break;
-                case Extention.Text: this.fileExtentionText = "txt"; break;
-                case Extention.Bat: this.fileExtentionText = "bat"; break;
-                case Extention.Python: this.fileExtentionText = "py"; break;
-                default: this.fileExtentionText = ""; break;
-            }
-        }
-        private void CheckIfFileAlreadyExistsAndUpdateThisBlueprint()
+        private void UpdateThisBlueprintIfFileAlreadyExists()
         {
             if (File.Exists(this.Path))
             {
@@ -120,8 +103,6 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC METHODS ===============================================================
-
-
         /// <summary> Adds text to the Content property. </summary>
         /// <param name="content">The content string to be added.</param>
         public void AddContent(string content) => Content += content;
@@ -138,7 +119,6 @@ namespace FileBuilder
 
         /// <summary> Makes Content property empty. </summary>
         public void ClearContent() => Content = "";
-
 
         /// <summary> Creates the real file or updates the existing one. </summary>
         public void Build() {
@@ -173,8 +153,6 @@ namespace FileBuilder
             duplication.AddContent(Content);
             return duplication;
         }
-
         #endregion =======================================================================================
-
     }
 }
