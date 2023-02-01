@@ -56,7 +56,7 @@ fileBP.Build();
 You unmount the real file through the Unbuild method.
 - It DOES NOT delete the blueprint object.
 - The existence of the real file is checked inside Unbuild method... 
-- ... so don't worry trying to unbuild an inexisting file.
+- ... so don't worry if you try to unbuild an inexisting file.
 ```cs
 fileBP.Unbuild();
 ```
