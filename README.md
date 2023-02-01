@@ -1,5 +1,5 @@
 # FileBuilder 
-## 1. [(Download)](https://github.com/dieg0hartmann/FileBuilder/raw/main/bin/Debug/FileBuilder.dll)
+## 1. [Download](https://github.com/dieg0hartmann/FileBuilder/raw/main/bin/Debug/FileBuilder.dll) the .dll
 1. C# library for creating files with a high level of abstraction and security.
 2. Use simple methods to build, unbuild or rebuild your files.
 3. Work with files without changing them directly everytime you edit some property, such as name or inner content.
