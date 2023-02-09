@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
 
 namespace FileBuilder
 {
@@ -48,7 +44,7 @@ namespace FileBuilder
             set {
                 if (value != null) location = value.Replace("\\", "/");
                 else location = value;
-                FolderParent?.RemoveFolder(this);
+                FolderParent?.Remove(this);
             }
         }
 
@@ -61,21 +57,27 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC METHODS ====================
-        public void AddFile(FileBlueprint fileBlueprint)
+
+        public void Clear()
+        {
+            ChildFileList.Clear();
+            ChildFolderList.Clear();
+        }
+        public void Add(FileBlueprint fileBlueprint)
         {
             if (!ChildFileList.Contains(fileBlueprint)) {
                 fileBlueprint.FolderParent = this;
                 ChildFileList.Add(fileBlueprint);
-            };
+            }
         }
-        public void RemoveFile(FileBlueprint fileBlueprint)
+        public void Remove(FileBlueprint fileBlueprint)
         {
             if (ChildFileList.Contains(fileBlueprint)) { 
                 fileBlueprint.FolderParent = null;
                 ChildFileList.Remove(fileBlueprint);
             }
         }
-        public void AddFolder(FolderBlueprint folderBlueprint)
+        public void Add(FolderBlueprint folderBlueprint)
         {
             if (!ChildFolderList.Contains(folderBlueprint)) {
                 folderBlueprint.Location = Path;
@@ -83,7 +85,7 @@ namespace FileBuilder
                 ChildFolderList.Add(folderBlueprint);
             }
         }
-        public void RemoveFolder(FolderBlueprint folderBlueprint)
+        public void Remove(FolderBlueprint folderBlueprint)
         {
             if (ChildFolderList.Contains(folderBlueprint))
             {
@@ -93,8 +95,9 @@ namespace FileBuilder
         }
 
         public void MoveTo(FolderBlueprint parent) {
-            parent.AddFolder(this);
+            FolderParent.Remove(this);
             FolderParent = parent;
+            FolderParent.Add(this);
         }
 
         #endregion --------------------------------------------

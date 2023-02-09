@@ -151,8 +151,9 @@ namespace FileBuilder
 
         public void MoveTo(FolderBlueprint parent)
         {
-            parent.AddFile(this);
+            FolderParent.Remove(this);
             FolderParent = parent;
+            FolderParent.Add(this);
         }
 
         #endregion =======================================================================================
