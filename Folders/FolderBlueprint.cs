@@ -95,7 +95,7 @@ namespace FileBuilder
         }
 
         public void MoveTo(FolderBlueprint parent) {
-            FolderParent.Remove(this);
+            FolderParent?.Remove(this);
             FolderParent = parent;
             FolderParent.Add(this);
         }
