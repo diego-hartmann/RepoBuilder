@@ -4,6 +4,10 @@ namespace FileBuilder
 {
     public class FileBlueprint
     {
+
+
+
+
      
         #region =========== CONSTRUCTORS ===============================================================
 
@@ -11,25 +15,18 @@ namespace FileBuilder
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
-        public FileBlueprint(string location, string name, Extention extention)
+        public FileBlueprint(string name, Extention extention)
         {
-            this.FileBlueprintConstructor(location, name, extention);
-        }
-
-        /// <summary> Creates a virtual file that can be edited before being really created into your local machine. </summary>
-        /// <param name="folder">The Folder enum value containing the path that the real file will be created in.</param>
-        /// <param name="name">The name the real file will have.</param>
-        /// <param name="extention">The extention of the file.</param>
-        public FileBlueprint(Folder folder, string name, Extention extention)
-        {
-            this.FileBlueprintConstructor(folder.ToLocationString(), name, extention);
+            this.FileBlueprintConstructor(name, extention);
         }
 
         #endregion =======================================================================================
 
 
+
+
+
         #region =========== PRIVATE FIELDS ===============================================================
-        private string location;
         private Extention extention;
         private string fileExtentionText;
         
@@ -43,20 +40,27 @@ namespace FileBuilder
         #endregion =======================================================================================
 
 
+
+
+
         #region =========== PUBLIC PROPERTIES ====================================================
 
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; private set; }
 
         /// <summary> Specifies if this file is currently mounted with the Build method (readonly). </summary>
-        public bool IsFileBuilded { get; private set; }
+        public bool IsBuilt { get; private set; }
+
+
+        /// <summary> Specifies if this file has folder parent. </summary>
+        public bool HasFolderParent => FolderParent != null;
+
+        /// <summary> The folder parent of the file. </summary>
+        public FolderBlueprint FolderParent { get; internal set; }
 
         /// <summary> Location of the file. </summary>
-        public string Location
-        {
-            get => location;
-            set => location = value.Replace("\\", "/");
-        }
+        public string Location => FolderParent?.Path ?? null;
+            
 
         /// <summary> Name of the file. </summary>
         public string Name { get; set; }
@@ -81,13 +85,13 @@ namespace FileBuilder
         #endregion ===============================================================================================
 
 
+
+
         #region =========== PRIVATE METHODS ==============================================================
-        private void FileBlueprintConstructor(string location, string name, Extention extention)
+        private void FileBlueprintConstructor(string name, Extention extention)
         {
-            this.Location = location;
             this.Name = name;
             this.Extention = extention;
-            this.unbuildLocation = location;
             this.unbuildName = name;
             this.unbuildFileExtentionText = extention.ToExtentionString();
             CheckIfFileAlreadyExistsAndUpdateThisBlueprint();
@@ -105,11 +109,13 @@ namespace FileBuilder
                 this.AddContent(fileContent);
                 
                 //saying to the algorithm that the file is already built
-                this.IsFileBuilded = true;
+                this.IsBuilt = true;
 
             }
         }
         #endregion =======================================================================================
+
+
 
 
         #region =========== PUBLIC METHODS ===============================================================
@@ -133,40 +139,54 @@ namespace FileBuilder
         public void ClearContent() => Content = "";
 
 
-        /// <summary> Creates the real file or updates the existing one. </summary>
-        public void Build() {
-            Unbuild();
-            
-            // updating the UnbuildPath property through the three fields that compose it.  
-            this.unbuildLocation = this.Location;
-            this.unbuildName = this.Name;
-            this.unbuildFileExtentionText = this.fileExtentionText;
-            
-            StreamWriter writer = new StreamWriter(Path, false);
-            writer.Write(Content);
-            writer.Close();
-            IsFileBuilded = true;
-        }
-
-        /// <summary> Deletes the real file. </summary>
-        /// <param name="fileBlueprint">The blueprint of the real file to be deleted.</param>
-        public void Unbuild() {
-            if (!IsFileBuilded) return;
-            // using the update UnbuildPath to delete the last version of the file
-            File.Delete(UnbuildPath);
-            IsFileBuilded = false;
-        }
-
         /// <summary> Creates another blueprint based on this. </summary>
         /// <returns>Returns a new object with the same properties.</returns>
         public FileBlueprint GetCopy() {
             NumberOfCopies++;
             string newName = $"{Name}_{NumberOfCopies}";
-            FileBlueprint duplication = new FileBlueprint(Location, newName, Extention);
+            FileBlueprint duplication = new FileBlueprint(newName, Extention);
             duplication.AddContent(Content);
             return duplication;
         }
 
+        public void MoveTo(FolderBlueprint parent)
+        {
+            parent.AddFile(this);
+            FolderParent = parent;
+        }
+
+        #endregion =======================================================================================
+
+
+
+
+        #region =========== INTERNAL METHODS ===============================================================
+
+        /// <summary> Creates the real file or updates the existing one. </summary>
+        internal void Build()
+        {
+            Unbuild();
+
+            // updating the UnbuildPath property through the three fields that compose it.  
+            this.unbuildLocation = this.Location;
+            this.unbuildName = this.Name;
+            this.unbuildFileExtentionText = this.fileExtentionText;
+
+            StreamWriter writer = new StreamWriter(Path, false);
+            writer.Write(Content);
+            writer.Close();
+            IsBuilt = true;
+        }
+
+        /// <summary> Deletes the real file. </summary>
+        /// <param name="fileBlueprint">The blueprint of the real file to be deleted.</param>
+        internal void Unbuild()
+        {
+            if (!IsBuilt) return;
+            // using the update UnbuildPath to delete the last version of the file
+            File.Delete(UnbuildPath);
+            IsBuilt = false;
+        }
         #endregion =======================================================================================
 
     }

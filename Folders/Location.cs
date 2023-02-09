@@ -3,7 +3,7 @@
 namespace FileBuilder
 {
     /// <summary> Preset folders. </summary>
-    public enum Folder
+    public enum Location
     {
         ApplicationData,
         CommonApplicationData,
@@ -28,12 +28,12 @@ namespace FileBuilder
         System,
         Templates,
     }
-    public static class FolderToString
+    public static class LocationToString
     {
         /// <summary> Converts the Folder enum value into valid  string. </summary>
         /// <param name="folder"></param>
         /// <returns>Valid path string.</returns>
-        public static string ToLocationString(this Folder folder) {
+        public static string ToLocationString(this Location folder) {
             // getting environment namespace enum folder value through our custom enum by convertion
             Environment.SpecialFolder convertedEnumValue = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), folder.ToString());
             // getting path string through this converted enum value

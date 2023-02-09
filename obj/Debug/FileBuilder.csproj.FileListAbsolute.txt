@@ -16,3 +16,9 @@ C:\MeusProjetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.csproj.AssemblyRef
 C:\MeusProjetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.csproj.CoreCompileInputs.cache
 C:\MeusProjetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.dll
 C:\MeusProjetos\libs\csharp\FileBuilder\obj\Debug\FileBuilder.pdb
+C:\MeusProjetos\FileBuilder\bin\Debug\FileBuilder.pdb
+C:\MeusProjetos\FileBuilder\obj\Debug\FileBuilder.csproj.AssemblyReference.cache
+C:\MeusProjetos\FileBuilder\obj\Debug\FileBuilder.csproj.CoreCompileInputs.cache
+C:\MeusProjetos\FileBuilder\obj\Debug\FileBuilder.dll
+C:\MeusProjetos\FileBuilder\obj\Debug\FileBuilder.pdb
+C:\MeusProjetos\FileBuilder\bin\Debug\FileBuilder.dll
