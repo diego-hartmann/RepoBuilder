@@ -31,6 +31,7 @@ namespace FileBuilder
 
 
         public void MoveTo(Folders folder) => folder.Add(this);
+        public void QuitFrom(Folders folder) => folder.Remove(this);
 
         #endregion =======================================================================================
 

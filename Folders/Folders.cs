@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace FileBuilder
@@ -9,9 +10,6 @@ namespace FileBuilder
     public abstract class Folders
     {
 
-        #region ============ PRIVATE FIELDS ================
-        private bool IsContainer = false;
-        #endregion -----------------------------------------
 
 
         #region =========== PROTECTED FIELDS ====================
@@ -55,44 +53,55 @@ namespace FileBuilder
             ChildFileList.Clear();
             ChildFolderList.Clear();
         }
-        public Folders Add(Files fileBlueprint)
+        public void Add(Files fileBlueprint)
         {
-            if (!ChildFileList.Contains(fileBlueprint))
+            // same blueprint...
+            if (ChildFileList.Contains(fileBlueprint)) return;
+            // same file assignature...
+            foreach (var item in ChildFileList)
             {
-                fileBlueprint.checkIfFileExists();
-                fileBlueprint.FolderParent = this;
-                ChildFileList.Add(fileBlueprint);
+                if (item.Name == fileBlueprint.Name && item.Extention == fileBlueprint.Extention)
+                {
+                    return;
+                }
             }
-            return this;
+            // ok
+            fileBlueprint.CheckForExistingFile();
+            fileBlueprint.FolderParent = this;
+            ChildFileList.Add(fileBlueprint);
         }
-        public Folders Remove(Files fileBlueprint)
+        public void Remove(Files fileBlueprint)
         {
             if (ChildFileList.Contains(fileBlueprint))
             {
                 fileBlueprint.FolderParent = null;
                 ChildFileList.Remove(fileBlueprint);
             }
-            return this;
         }
-        public Folders Add(Folders folderBlueprint)
+        public void Add(Folders folderBlueprint)
         {
-            if (!ChildFolderList.Contains(folderBlueprint))
+            // same blueprint...
+            if (ChildFolderList.Contains(folderBlueprint)) return;
+            // same assignature...
+            foreach (var item in ChildFolderList)
             {
-                folderBlueprint.Location = Path;
-                folderBlueprint.FolderParent = this;
-                folderBlueprint.CheckForExistingContent();
-                ChildFolderList.Add(folderBlueprint);
+                if (item.Name == folderBlueprint.Name)
+                {
+                    return;
+                }
             }
-            return this;
+            folderBlueprint.Location = Path;
+            folderBlueprint.FolderParent = this;
+            folderBlueprint.CheckForExistingContent();
+            ChildFolderList.Add(folderBlueprint);
         }
-        public Folders Remove(Folders folderBlueprint)
+        public void Remove(Folders folderBlueprint)
         {
             if (ChildFolderList.Contains(folderBlueprint))
             {
                 folderBlueprint.FolderParent = null;
                 ChildFolderList.Remove(folderBlueprint);
             }
-            return this;
         }
        
 
@@ -125,33 +134,42 @@ namespace FileBuilder
 
 
         #region =========== PROTECTED METHODS ==================
+
         protected void CheckForExistingContent()
         {
-            IsBuilt = Directory.Exists(Path);
+            string _path = $"{Path}/";
+            IsBuilt = Directory.Exists(_path);
             try
             {
-                var folders = Directory.GetDirectories(Path);
-                foreach (string folderName in Directory.GetDirectories(Path))
+                var folders = Directory.GetDirectories(_path);
+                foreach (string folderName in folders)
                 {
                     var _folder = new FolderBlueprint(folderName);
                     _folder.IsBuilt = true;
                     Add(_folder);
                 }
 
-                var files = Directory.GetFiles(Path);
-                foreach (string fileName in Directory.GetFiles(Path))
+                var files = Directory.GetFiles(_path);
+                foreach (string file in files)
                 {
-                    FileInfo fi = new FileInfo(fileName);
-                    Extention _fileExtention = fi.Extension.ToExtentionEnum();
-                    var _file = new FileBlueprint(fileName, _fileExtention);
-                    if (_file.checkIfFileExists()) Add(_file);
+                    // removing the location from the filename
+                    string _name = (file.Replace(_path, ""));
+                    
+                    // removing the extention text from the file name
+                    _name = System.IO.Path.GetFileNameWithoutExtension(_name);
+                    
+                    // getting extention enum from extention text
+                    Extention _extention = ((new FileInfo(file)).Extension).Replace(".","").ToExtentionEnum();
+                    
+                    // adding file to the list of blueprints.
+                    var _file = new FileBlueprint(_name, _extention);
+                    Add(_file);
                 }
             }
             catch
             {
                 // 
             }
-            
         }
         protected void Constructor(string name, string location = null)
         {
@@ -174,22 +192,22 @@ namespace FileBuilder
         private void BuildFiles()
         {
             if (ChildFileList.Count < 1) return;
-            foreach (FileBlueprint file in ChildFileList) file.Build();
+            foreach (Files file in ChildFileList) file.Build();
         }
         private void UnbuildFiles()
         {
             if (ChildFileList.Count < 1) return;
-            foreach (FileBlueprint file in ChildFileList) file.Unbuild();
+            foreach (Files file in ChildFileList) file.Unbuild();
         }
         private void BuildFolders()
         {
             if (ChildFolderList.Count < 1) return;
-            foreach (FolderBlueprint folder in ChildFolderList) folder.Build();
+            foreach (Folders folder in ChildFolderList) folder.Build();
         }
         private void UnbuildFolders()
         {
             if (ChildFolderList.Count < 1) return;
-            foreach (FolderBlueprint folder in ChildFolderList) folder.Unbuild();
+            foreach (Folders folder in ChildFolderList) folder.Unbuild();
         }
       
 

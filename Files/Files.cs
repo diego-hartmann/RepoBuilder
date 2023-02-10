@@ -7,11 +7,10 @@ namespace FileBuilder
 
         internal void Constructor(string name, Extention extention)
         {
-            this.Name = name;
-            this.Extention = extention;
-            this.unbuildName = name;
-            this.unbuildFileExtentionText = extention.ToExtentionString();
-            checkIfFileExists();
+            Name = name;
+            Extention = extention;
+            unbuildName = name;
+            unbuildFileExtentionText = extention.ToExtentionString();
         }
 
 
@@ -78,23 +77,21 @@ namespace FileBuilder
 
         #region =========== PRIVATE METHODS ==============================================================
 
-        internal bool checkIfFileExists()
+        internal bool CheckForExistingFile()
         {
-            if (File.Exists(this.Path))
-            {
-                // gettingthe the real file content
-                StreamReader fileReader = new StreamReader(this.Path);
-                string fileContent = fileReader.ReadToEnd();
-                fileReader.Close();
+            if (!File.Exists(Path)) return false;
 
-                // filling the object content with the real file content
-                this.AddContent(fileContent);
+            // gettingthe the real file content
+            StreamReader fileReader = new StreamReader(Path);
+            string fileContent = fileReader.ReadToEnd();
+            fileReader.Close();
 
-                //saying to the algorithm that the file is already built
-                this.IsBuilt = true;
-                return true;
-            }
-            return false;
+            // filling the object content with the real file content
+            AddContent(fileContent);
+
+            //saying to the algorithm that the file is already built
+            IsBuilt = true;
+            return true;
         }
         #endregion =======================================================================================
 
