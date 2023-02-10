@@ -5,7 +5,7 @@
     /// Edit it Edit as you see fit.
     /// Just don't forget to update the ToExtentionString method as well.
     /// </summary>
-    public enum Extention { CSharp, HTML, CSS, JavaScript, Text, Bat, Python }
+    public enum Extention { CSharp, HTML, CSS, JavaScript, Text, Bat, Python, None }
 
     internal static class EnumToString
     {
@@ -27,6 +27,29 @@
                 case Extention.Bat: return "bat";
                 case Extention.Python: return "py";
                 default: return "";
+            }
+        }
+
+
+
+        /// <summary>
+        /// Converts the string value into its respective extention type enum .
+        /// Eg. (Extention.JavaScript) => ".js"
+        /// </summary>
+        /// <param name="extentionValue">The enum value to be converted.</param>
+        /// <returns></returns>
+        internal static Extention ToExtentionEnum(this string extention)
+        {
+            switch (extention)
+            {
+                case "cs": return Extention.CSharp;
+                case "html": return Extention.HTML;
+                case "css": return Extention.CSS;
+                case "js": return Extention.JavaScript;
+                case "txt": return Extention.Text;
+                case "bat": return Extention.Bat;
+                case "py": return Extention.Python;
+                default: return Extention.None;
             }
         }
     }

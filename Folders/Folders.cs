@@ -6,18 +6,14 @@ using System.Text;
 namespace FileBuilder
 {
 
-    public abstract class Folder
+    public abstract class Folders
     {
-        public static class Create
-        {
-            public static Container Container(string name, string location) => new Container(name, location);
-            public static Container Container(string name, Location location) => new Container(name, location.ToLocationString());
-            public static FolderBlueprint Blueprint(string name, string location) => new FolderBlueprint(name, location);
-            public static FolderBlueprint Blueprint(string name, Location location) => new FolderBlueprint(name, location.ToLocationString());
-            public static FolderBlueprint Blueprint(string name) => new FolderBlueprint(name);
-        }
 
-        
+        #region ============ PRIVATE FIELDS ================
+        private bool IsContainer = false;
+        #endregion -----------------------------------------
+
+
         #region =========== PROTECTED FIELDS ====================
         protected string location = String.Empty;
 
@@ -28,27 +24,12 @@ namespace FileBuilder
 
 
 
-
-        #region ========== PROTECTED METHODS =====================
-        protected void Constructor(string name, string location)
-        {
-            Location = location;
-            Name = name;
-            unbuildLocation = location;
-            unbuildName = name;
-            IsBuilt = Directory.Exists(Path);
-        }
-        #endregion ------------------------------------------------------
-
-
-       
-
         #region =========== PUBLIC PROPERTIES =================
         public bool IsBuilt { get; protected set; }
         public string Name { get; protected set; }
 
 
-        public Folder FolderParent { get; protected set; } = null;
+        public Folders FolderParent { get; protected set; } = null;
         public string Location
         {
             get => location;
@@ -62,8 +43,8 @@ namespace FileBuilder
         }
 
         public string Path => $"{Location}/{Name}";
-        public List<DocumentBlueprint> ChildFileList { get; protected set; } = new List<DocumentBlueprint>();
-        public List<Folder> ChildFolderList { get; protected set; } = new List<Folder>();
+        public List<Files> ChildFileList { get; protected set; } = new List<Files>();
+        public List<Folders> ChildFolderList { get; protected set; } = new List<Folders>();
         #endregion --------------------------------------------
 
 
@@ -74,56 +55,47 @@ namespace FileBuilder
             ChildFileList.Clear();
             ChildFolderList.Clear();
         }
-        public void Add(DocumentBlueprint fileBlueprint)
+        public Folders Add(Files fileBlueprint)
         {
             if (!ChildFileList.Contains(fileBlueprint))
             {
+                fileBlueprint.checkIfFileExists();
                 fileBlueprint.FolderParent = this;
                 ChildFileList.Add(fileBlueprint);
             }
+            return this;
         }
-        public void Remove(DocumentBlueprint fileBlueprint)
+        public Folders Remove(Files fileBlueprint)
         {
             if (ChildFileList.Contains(fileBlueprint))
             {
                 fileBlueprint.FolderParent = null;
                 ChildFileList.Remove(fileBlueprint);
             }
+            return this;
         }
-        public void Add(Folder folderBlueprint)
+        public Folders Add(Folders folderBlueprint)
         {
             if (!ChildFolderList.Contains(folderBlueprint))
             {
                 folderBlueprint.Location = Path;
                 folderBlueprint.FolderParent = this;
+                folderBlueprint.CheckForExistingContent();
                 ChildFolderList.Add(folderBlueprint);
             }
+            return this;
         }
-        public void Remove(Folder folderBlueprint)
+        public Folders Remove(Folders folderBlueprint)
         {
             if (ChildFolderList.Contains(folderBlueprint))
             {
                 folderBlueprint.FolderParent = null;
                 ChildFolderList.Remove(folderBlueprint);
             }
+            return this;
         }
-        public void Add(FolderBlueprint folderBlueprint)
-        {
-            if (!ChildFolderList.Contains(folderBlueprint))
-            {
-                folderBlueprint.Location = Path;
-                folderBlueprint.FolderParent = this;
-                ChildFolderList.Add(folderBlueprint);
-            }
-        }
-        public void Remove(FolderBlueprint folderBlueprint)
-        {
-            if (ChildFolderList.Contains(folderBlueprint))
-            {
-                folderBlueprint.FolderParent = null;
-                ChildFolderList.Remove(folderBlueprint);
-            }
-        }
+       
+
         #endregion --------------------------------------------
 
 
@@ -153,7 +125,42 @@ namespace FileBuilder
 
 
         #region =========== PROTECTED METHODS ==================
+        protected void CheckForExistingContent()
+        {
+            IsBuilt = Directory.Exists(Path);
+            try
+            {
+                var folders = Directory.GetDirectories(Path);
+                foreach (string folderName in Directory.GetDirectories(Path))
+                {
+                    var _folder = new FolderBlueprint(folderName);
+                    _folder.IsBuilt = true;
+                    Add(_folder);
+                }
 
+                var files = Directory.GetFiles(Path);
+                foreach (string fileName in Directory.GetFiles(Path))
+                {
+                    FileInfo fi = new FileInfo(fileName);
+                    Extention _fileExtention = fi.Extension.ToExtentionEnum();
+                    var _file = new FileBlueprint(fileName, _fileExtention);
+                    if (_file.checkIfFileExists()) Add(_file);
+                }
+            }
+            catch
+            {
+                // 
+            }
+            
+        }
+        protected void Constructor(string name, string location = null)
+        {
+            Location = location;
+            Name = name;
+            unbuildLocation = location;
+            unbuildName = name;
+            CheckForExistingContent();
+        }
         protected void BuildAllContent()
         {
             BuildFolders();
@@ -167,12 +174,12 @@ namespace FileBuilder
         private void BuildFiles()
         {
             if (ChildFileList.Count < 1) return;
-            foreach (DocumentBlueprint file in ChildFileList) file.Build();
+            foreach (FileBlueprint file in ChildFileList) file.Build();
         }
         private void UnbuildFiles()
         {
             if (ChildFileList.Count < 1) return;
-            foreach (DocumentBlueprint file in ChildFileList) file.Unbuild();
+            foreach (FileBlueprint file in ChildFileList) file.Unbuild();
         }
         private void BuildFolders()
         {

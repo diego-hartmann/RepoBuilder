@@ -2,7 +2,7 @@
 
 namespace FileBuilder
 {
-    public class DocumentBlueprint : Document
+    public class FileBlueprint : Files
     {
 
         #region =========== CONSTRUCTORS ===============================================================
@@ -11,7 +11,7 @@ namespace FileBuilder
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
-        internal DocumentBlueprint(string name, Extention extention) => Constructor(name, extention);
+        public FileBlueprint(string name, Extention extention) => Constructor(name, extention);
 
         #endregion =======================================================================================
 
@@ -20,22 +20,17 @@ namespace FileBuilder
         #region =========== PUBLIC METHODS ===============================================================
         /// <summary> Creates another blueprint based on this. </summary>
         /// <returns>Returns a new object with the same properties.</returns>
-        public DocumentBlueprint GetCopy()
+        public FileBlueprint GetCopy()
         {
             NumberOfCopies++;
             string newName = $"{Name}_{NumberOfCopies}";
-            DocumentBlueprint duplication = Document.Create.Blueprint(newName, Extention);
+            FileBlueprint duplication = new FileBlueprint(newName, Extention);
             duplication.AddContent(Content);
             return duplication;
         }
 
 
-        public void MoveTo(Folder parent)
-        {
-            FolderParent?.Remove(this);
-            FolderParent = parent;
-            FolderParent.Add(this);
-        }
+        public void MoveTo(Folders folder) => folder.Add(this);
 
         #endregion =======================================================================================
 

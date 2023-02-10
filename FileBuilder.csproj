@@ -44,11 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Documents\Extention.cs" />
-    <Compile Include="Documents\Document.cs" />
-    <Compile Include="Documents\DocumentBlueprint.cs" />
-    <Compile Include="Folders\Container.cs" />
-    <Compile Include="Folders\Folder.cs" />
+    <Compile Include="Builder\Builder.cs" />
+    <Compile Include="Files\Extention.cs" />
+    <Compile Include="Files\Files.cs" />
+    <Compile Include="Files\FileBlueprint.cs" />
+    <Compile Include="Folders\ContainerBlueprint.cs" />
+    <Compile Include="Folders\Folders.cs" />
     <Compile Include="Folders\FolderBlueprint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Folders\Location.cs" />

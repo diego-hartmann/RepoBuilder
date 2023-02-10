@@ -1,13 +1,10 @@
-﻿using System.IO;
-
-namespace FileBuilder
+﻿namespace FileBuilder
 {
-    public class FolderBlueprint : Folder
+    public class FolderBlueprint : Folders
     {
 
         #region =========== CONSTRUCTORS ======================
-        internal FolderBlueprint(string name) => Constructor(name, null);
-        internal FolderBlueprint(string name, string location) => Constructor(name, location);
+        public FolderBlueprint(string name) => Constructor(name);
         #endregion --------------------------------------------
         
 
@@ -17,11 +14,7 @@ namespace FileBuilder
 
 
         #region =========== PUBLIC METHODS ====================
-        public void MoveTo(Folder parent) {
-            FolderParent?.Remove(this);
-            FolderParent = parent;
-            FolderParent.Add(this);
-        }
+        public void MoveTo(Folders folder) => folder.Add(this);
         #endregion --------------------------------------------
 
     }

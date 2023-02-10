@@ -2,12 +2,8 @@
 
 namespace FileBuilder
 {
-    public abstract class Document
+    public abstract class Files
     {
-        public static class Create
-        {
-            public static DocumentBlueprint Blueprint(string name, Extention extention) => new DocumentBlueprint(name, extention);
-        }
 
         internal void Constructor(string name, Extention extention)
         {
@@ -15,7 +11,7 @@ namespace FileBuilder
             this.Extention = extention;
             this.unbuildName = name;
             this.unbuildFileExtentionText = extention.ToExtentionString();
-            CheckIfFileAlreadyExistsAndUpdateThisBlueprint();
+            checkIfFileExists();
         }
 
 
@@ -42,14 +38,14 @@ namespace FileBuilder
         public int NumberOfCopies { get; protected set; }
 
         /// <summary> Specifies if this file is currently mounted with the Build method (readonly). </summary>
-        public bool IsBuilt { get; private set; }
+        public bool IsBuilt { get; internal set; }
 
 
         /// <summary> Specifies if this file has folder parent. </summary>
         public bool HasFolderParent => FolderParent != null;
 
         /// <summary> The folder parent of the file. </summary>
-        public Folder FolderParent { get; internal set; }
+        public Folders FolderParent { get; internal set; }
 
         /// <summary> Location of the file. </summary>
         public string Location => FolderParent?.Path ?? null;
@@ -82,7 +78,7 @@ namespace FileBuilder
 
         #region =========== PRIVATE METHODS ==============================================================
 
-        private void CheckIfFileAlreadyExistsAndUpdateThisBlueprint()
+        internal bool checkIfFileExists()
         {
             if (File.Exists(this.Path))
             {
@@ -96,8 +92,9 @@ namespace FileBuilder
 
                 //saying to the algorithm that the file is already built
                 this.IsBuilt = true;
-
+                return true;
             }
+            return false;
         }
         #endregion =======================================================================================
 
