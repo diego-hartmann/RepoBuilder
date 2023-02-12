@@ -1,11 +1,12 @@
 ﻿using System.IO;
+using System.Windows.Markup;
 
 namespace FileBuilder
 {
-    public abstract class Files
+    public abstract class Files : Blueprint
     {
 
-        internal void Constructor(string name, Extention extention)
+        internal void ConstructorForFile(string name, Extention extention)
         {
             Name = name;
             Extention = extention;
@@ -13,21 +14,10 @@ namespace FileBuilder
             unbuildFileExtentionText = extention.ToExtentionString();
         }
 
-
-        #region =========== PRIVATE FIELDS ===============================================================
+        #region ==== PRIVATE FIELDS ==============
         private Extention extention;
         private string fileExtentionText;
-
-        // these three data hold the last saved information to correctly unbuild the old version of the file through its old Path (UnbuildPath bellow).
-        // they will be updated into the Build method as the last path version saved.
-        private string unbuildLocation;
-        private string unbuildName;
-        private string unbuildFileExtentionText;
-        // called on Unbuild method;
-        private string UnbuildPath => $"{unbuildLocation}/{unbuildName}.{unbuildFileExtentionText}";
-        #endregion =======================================================================================
-
-
+        #endregion -------------------------------
 
 
 
@@ -35,23 +25,6 @@ namespace FileBuilder
 
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; protected set; }
-
-        /// <summary> Specifies if this file is currently mounted with the Build method (readonly). </summary>
-        public bool IsBuilt { get; internal set; }
-
-
-        /// <summary> Specifies if this file has folder parent. </summary>
-        public bool HasFolderParent => FolderParent != null;
-
-        /// <summary> The folder parent of the file. </summary>
-        public Folders FolderParent { get; internal set; }
-
-        /// <summary> Location of the file. </summary>
-        public string Location => FolderParent?.Path ?? null;
-
-
-        /// <summary> Name of the file. </summary>
-        public string Name { get; set; }
 
         /// <summary> Extention type of the file. </summary>
         public Extention Extention
@@ -65,7 +38,7 @@ namespace FileBuilder
         }
 
         /// <summary> Complete path of the file, including location, name and extention (readonly). </summary>
-        public string Path => $"{Location}/{Name}.{fileExtentionText}";
+        public override string Path => $"{Location}/{Name}.{fileExtentionText}";
 
         /// <summary> The content inside the file (readonly). </summary>
         public string Content { get; private set; } = string.Empty;
@@ -74,14 +47,15 @@ namespace FileBuilder
 
 
 
-
         #region =========== PRIVATE METHODS ==============================================================
 
-        internal bool CheckForExistingFile()
+        internal override void CheckForExistence()
         {
-            if (!File.Exists(Path)) return false;
+            // DOES NOT PREVIUOUS EXIST
+            if (!File.Exists(Path)) return;
 
-            // gettingthe the real file content
+            // PREVIUOUS EXISTS
+            // getting the the real file content
             StreamReader fileReader = new StreamReader(Path);
             string fileContent = fileReader.ReadToEnd();
             fileReader.Close();
@@ -91,7 +65,6 @@ namespace FileBuilder
 
             //saying to the algorithm that the file is already built
             IsBuilt = true;
-            return true;
         }
         #endregion =======================================================================================
 
@@ -117,7 +90,7 @@ namespace FileBuilder
         }
 
         /// <summary> Makes Content property empty. </summary>
-        public void ClearContent() => Content = "";
+        public void ClearContent() => Content = string.Empty;
         #endregion ------------------------------------------------------------------------------------------
 
 
@@ -126,30 +99,17 @@ namespace FileBuilder
         #region =========== INTERNAL METHODS ===============================================================
 
         /// <summary> Creates the real file or updates the existing one. </summary>
-        internal void Build()
+        internal override void OnBuild()
         {
-            Unbuild();
-
-            // updating the UnbuildPath property through the three fields that compose it.  
-            this.unbuildLocation = this.Location;
-            this.unbuildName = this.Name;
             this.unbuildFileExtentionText = this.fileExtentionText;
-
             StreamWriter writer = new StreamWriter(Path, false);
             writer.Write(Content);
             writer.Close();
-            IsBuilt = true;
         }
 
         /// <summary> Deletes the real file. </summary>
         /// <param name="fileBlueprint">The blueprint of the real file to be deleted.</param>
-        internal void Unbuild()
-        {
-            if (!IsBuilt) return;
-            // using the update UnbuildPath to delete the last version of the file
-            File.Delete(UnbuildPath);
-            IsBuilt = false;
-        }
+        internal override void OnUnbuild() => File.Delete(UnbuildPath);
         #endregion =======================================================================================
     }
 }

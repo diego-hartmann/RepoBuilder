@@ -1,36 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace FileBuilder
 {
 
-    public abstract class Folders
+    public abstract class Folders : Blueprint
     {
-
-
 
         #region =========== PROTECTED FIELDS ====================
         protected string location = String.Empty;
-
-        protected string unbuildLocation = String.Empty;
-        protected string unbuildName = String.Empty;
         protected string unbuildLPath => $"{unbuildLocation}/{unbuildName}";
+        protected bool isContainer = false;
         #endregion --------------------------------------------
 
 
-
         #region =========== PUBLIC PROPERTIES =================
-        public bool IsBuilt { get; protected set; }
-        public string Name { get; protected set; }
+        
+        /// <summary> Location of the file. </summary>
 
-
-        public Folders FolderParent { get; protected set; } = null;
-        public string Location
+        public override string Location
         {
-            get => location;
+            get => FolderParent?.Path ?? null;
+            // for containers, it must have a setter (see ConstructorForContainer()).
             protected set
             {
                 var _value = new StringBuilder(value);
@@ -40,7 +33,7 @@ namespace FileBuilder
             }
         }
 
-        public string Path => $"{Location}/{Name}";
+        public override string Path => $"{Location}/{Name}" ?? null;
         public List<Files> ChildFileList { get; protected set; } = new List<Files>();
         public List<Folders> ChildFolderList { get; protected set; } = new List<Folders>();
         #endregion --------------------------------------------
@@ -65,8 +58,8 @@ namespace FileBuilder
                     return;
                 }
             }
-            // ok
-            fileBlueprint.CheckForExistingFile();
+            // ok, you can add.
+            fileBlueprint.CheckForExistence();
             fileBlueprint.FolderParent = this;
             ChildFileList.Add(fileBlueprint);
         }
@@ -76,6 +69,7 @@ namespace FileBuilder
             {
                 fileBlueprint.FolderParent = null;
                 ChildFileList.Remove(fileBlueprint);
+                fileBlueprint.IsBuilt = false;
             }
         }
         public void Add(Folders folderBlueprint)
@@ -85,14 +79,11 @@ namespace FileBuilder
             // same assignature...
             foreach (var item in ChildFolderList)
             {
-                if (item.Name == folderBlueprint.Name)
-                {
-                    return;
-                }
+                if (item.Name == folderBlueprint.Name) return;
             }
-            folderBlueprint.Location = Path;
+            // ok you can add.
             folderBlueprint.FolderParent = this;
-            folderBlueprint.CheckForExistingContent();
+            folderBlueprint.CheckForExistence();
             ChildFolderList.Add(folderBlueprint);
         }
         public void Remove(Folders folderBlueprint)
@@ -101,6 +92,7 @@ namespace FileBuilder
             {
                 folderBlueprint.FolderParent = null;
                 ChildFolderList.Remove(folderBlueprint);
+                FolderParent.IsBuilt = false;
             }
         }
        
@@ -111,22 +103,16 @@ namespace FileBuilder
 
 
         #region ========= INTERNAL METHODS =========================
-        internal void Build()
+        internal override void OnBuild()
         {
-            if (Location == null) return;
-            Unbuild();
-            this.unbuildLocation = this.Location;
-            this.unbuildName = this.Name;
             Directory.CreateDirectory(Path);
             BuildAllContent();
         }
 
-        internal void Unbuild()
+        internal override void OnUnbuild()
         {
-            if (!IsBuilt) return;
             Directory.Delete(unbuildLPath, true);
             UnbuildAllContent();
-            IsBuilt = false;
         }
         #endregion -------------------------------------------------
 
@@ -135,49 +121,82 @@ namespace FileBuilder
 
         #region =========== PROTECTED METHODS ==================
 
-        protected void CheckForExistingContent()
+        private void CheckForSelfExistence(string _path)
         {
-            string _path = $"{Path}/";
-            IsBuilt = Directory.Exists(_path);
+            if (!Directory.Exists(_path)) return;
+
+            //saying to the algorithm that the container is already built
+            this.IsBuilt = true;
+        }
+        private void CheckForContentExistence_Files(string __path)
+        {
+            var files = Directory.GetFiles(__path);
+            foreach (string file in files)
+            {
+                // removing the location from the filename
+                string _name = (file.Replace(__path, ""));
+
+                // removing the extention text from the file name
+                _name = System.IO.Path.GetFileNameWithoutExtension(_name);
+
+                // getting extention enum from extention text
+                Extention _extention = ((new FileInfo(file)).Extension).Replace(".", "").ToExtentionEnum();
+
+                // creating a blueprint for this existing file.
+                var _file = new FileBlueprint(_name, _extention);
+
+                // saying to the algorithm that the file is already built.
+                _file.IsBuilt = true;
+
+                // adding it to the list of this container.
+                Add(_file);
+            }
+        }
+        private void CheckForContentExistence_Folders(string __path)
+        {
+            var folders = Directory.GetDirectories(__path);
+            foreach (string folderName in folders)
+            {
+                // creating a blueprint for this existing folder
+                var _folder = new FolderBlueprint(folderName);
+
+                // saying to the algorithm that this folder is already built.
+                _folder.IsBuilt = true;
+
+                // adding it to the list of this container.
+                Add(_folder);
+            }
+        }
+        private void CheckForContentExistence(string _path)
+        {
+            //checking if there is any content inside this previus existing directory
             try
             {
-                var folders = Directory.GetDirectories(_path);
-                foreach (string folderName in folders)
-                {
-                    var _folder = new FolderBlueprint(folderName);
-                    _folder.IsBuilt = true;
-                    Add(_folder);
-                }
-
-                var files = Directory.GetFiles(_path);
-                foreach (string file in files)
-                {
-                    // removing the location from the filename
-                    string _name = (file.Replace(_path, ""));
-                    
-                    // removing the extention text from the file name
-                    _name = System.IO.Path.GetFileNameWithoutExtension(_name);
-                    
-                    // getting extention enum from extention text
-                    Extention _extention = ((new FileInfo(file)).Extension).Replace(".","").ToExtentionEnum();
-                    
-                    // adding file to the list of blueprints.
-                    var _file = new FileBlueprint(_name, _extention);
-                    Add(_file);
-                }
+                CheckForContentExistence_Folders(_path);
+                CheckForContentExistence_Files(_path);
             }
             catch
             {
                 // 
             }
         }
-        protected void Constructor(string name, string location = null)
+        internal override void CheckForExistence()
         {
-            Location = location;
+            string _path = $"{Path}/";
+            CheckForSelfExistence(_path);
+            CheckForContentExistence(_path);
+        }
+        protected void ConstructorForFolder(string name)
+        {
             Name = name;
-            unbuildLocation = location;
             unbuildName = name;
-            CheckForExistingContent();
+        }
+        protected void ConstructorForContainer(string name, string location)
+        {
+            ConstructorForFolder(name);
+            Location = location;
+            unbuildLocation = location;
+            CheckForExistence();
         }
         protected void BuildAllContent()
         {

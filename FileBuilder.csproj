@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blueprint\Blueprint.cs" />
     <Compile Include="Builder\Builder.cs" />
     <Compile Include="Files\Extention.cs" />
     <Compile Include="Files\Files.cs" />

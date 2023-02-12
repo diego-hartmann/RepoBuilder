@@ -12,8 +12,8 @@ namespace FileBuilder
     public class ContainerBlueprint : Folders
     {
         #region =========== CONSTRUCTORS ======================
-        public ContainerBlueprint(string name, string location) => Constructor(name, location);
-        public ContainerBlueprint(string name, Location location) => Constructor(name, location.ToLocationString());
+        public ContainerBlueprint(string name, string location) => ConstructorForContainer(name, location);
+        public ContainerBlueprint(string name, Location location) => ConstructorForContainer(name, location.ToLocationString());
         #endregion --------------------------------------------
         public void MoveTo(string location) => this.Location = location;
         public void MoveTo(Location location) => this.Location = location.ToLocationString();
