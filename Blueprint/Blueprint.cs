@@ -5,12 +5,6 @@ namespace FileBuilder
     public abstract class Blueprint
     {
 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
 
         #region =========================- PROTECTED UNBUILD DATA -================================================
         // these three data hold the last saved information to correctly unbuild the old version of the file through its old Path (UnbuildPath bellow).
@@ -23,12 +17,12 @@ namespace FileBuilder
         protected string UnbuildPath => $"{unbuildLocation}/{unbuildName}.{unbuildFileExtentionText}";
         #endregion ________________________________________________________________________________________________
 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
+    
+
+
+
+
+
 
         #region =========================- PUBLIC BLUEPRINT PROPERTIES -===========================================
         /// <summary> Specifies if this content is currently mounted with the Build method (readonly). </summary>
@@ -50,12 +44,13 @@ namespace FileBuilder
         public abstract string Path { get; }
         #endregion ________________________________________________________________________________________________
 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
+    
+
+
+
+
+
+
 
         #region =========================- INTEERNAL BLUEPRINT METHODS -===========================================
         /// <summary> Specifies if the real file or folder exists based on this directory's of file's Path readonly string. </summary>
@@ -86,12 +81,7 @@ namespace FileBuilder
         }
         #endregion ________________________________________________________________________________________________
 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
+
 
     }
 }
