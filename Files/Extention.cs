@@ -33,8 +33,8 @@
 
 
         /// <summary>
-        /// Converts the string value into its respective extention type enum .
-        /// Eg. (Extention.JavaScript) => ".js"
+        /// Converts the string value into its respective extention type enum.
+        /// (Eg. Extention.JavaScript returns ".js").
         /// </summary>
         /// <param name="extentionValue">The enum value to be converted.</param>
         /// <returns></returns>

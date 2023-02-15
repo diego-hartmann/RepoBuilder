@@ -51,17 +51,18 @@ namespace FileBuilder
 
         internal override void CheckForExistence()
         {
-            // DOES NOT PREVIUOUS EXIST
+            // DOES NOT PREVIUOUSLY EXIST
             if (!File.Exists(Path)) return;
 
-            // PREVIUOUS EXISTS
+            // PREVIUOUSLY EXISTS
             // getting the the real file content
-            StreamReader fileReader = new StreamReader(Path);
-            string fileContent = fileReader.ReadToEnd();
-            fileReader.Close();
-
-            // filling the object content with the real file content
-            AddContent(fileContent);
+            using (StreamReader fileReader = new StreamReader(Path))
+            {
+                string fileContent = fileReader.ReadToEnd();
+                fileReader.Close();
+                // filling the object content with the real file content
+                AddContent(fileContent);
+            }
 
             //saying to the algorithm that the file is already built
             IsBuilt = true;
@@ -102,9 +103,10 @@ namespace FileBuilder
         internal override void OnBuild()
         {
             this.unbuildFileExtentionText = this.fileExtentionText;
-            StreamWriter writer = new StreamWriter(Path, false);
-            writer.Write(Content);
-            writer.Close();
+            using(StreamWriter writer = new StreamWriter(Path, false)){
+                writer.Write(Content);
+                writer.Close();
+            }
         }
 
         /// <summary> Deletes the real file. </summary>

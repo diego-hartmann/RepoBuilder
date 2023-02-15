@@ -26,7 +26,7 @@ namespace FileBuilder
             // for containers, it must have a setter (see ConstructorForContainer()).
             protected set
             {
-                var _value = new StringBuilder(value);
+                StringBuilder _value = new StringBuilder(value);
                 _value.Replace("\\", "/");
                 _value.Replace("//", "/");
                 location = _value.ToString();
@@ -178,6 +178,10 @@ namespace FileBuilder
             catch
             {
                 // 
+            }
+            finally
+            {
+                //
             }
         }
         internal override void CheckForExistence()
