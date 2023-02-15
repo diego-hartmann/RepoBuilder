@@ -1,11 +1,12 @@
 ﻿using System.IO;
-using System.Windows.Markup;
 
 namespace FileBuilder
 {
     public abstract class Files : Blueprint
     {
 
+
+        #region ===========- CONSTRUCTOR HELPER -========================================================
         internal void ConstructorForFile(string name, Extention extention)
         {
             Name = name;
@@ -13,16 +14,29 @@ namespace FileBuilder
             unbuildName = name;
             unbuildFileExtentionText = extention.ToExtentionString();
         }
+        #endregion ______________________________________________________________________________________
 
-        #region ==== PRIVATE FIELDS ==============
+
+
+
+
+
+
+
+        #region ===========- PRIVATE FIELDS -============================================================
         private Extention extention;
         private string fileExtentionText;
-        #endregion -------------------------------
+        #endregion ______________________________________________________________________________________
 
 
 
-        #region =========== PUBLIC PROPERTIES ====================================================
 
+
+
+
+
+
+        #region ===========- PUBLIC PROPERTIES -=========================================================
         /// <summary> Number of copies made with GetCopy method (readonly). </summary>
         public int NumberOfCopies { get; protected set; }
 
@@ -43,12 +57,50 @@ namespace FileBuilder
         /// <summary> The content inside the file (readonly). </summary>
         public string Content { get; private set; } = string.Empty;
 
-        #endregion ===============================================================================================
+        #endregion _______________________________________________________________________________________
 
 
 
-        #region =========== PRIVATE METHODS ==============================================================
 
+
+
+
+
+
+        #region ===========- PUBLIC METHODS -=============================================================
+        /// <summary> Adds text to the Content property. </summary>
+        /// <param name="content">The content string to be added.</param>
+        public void AddContent(string content) => Content += content;
+
+        /// <summary> Adds text line to the Content property. </summary>
+        /// <param name="content">The content string line to be added.</param>
+        public void AddContentLine(string content)
+        {
+            // if there is any content inside Content string...
+            if (Content.Length > 0)
+            {
+                // it will break the last written line.
+                Content += $"\n{content}";
+                return;
+            }
+
+            // otherwise, it will just sums on the Content without leaving the first line blank by braking it.
+            Content += content;
+        }
+
+        /// <summary> Makes Content property empty. </summary>
+        public void ClearContent() => Content = string.Empty;
+        #endregion _______________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+        #region ===========- INTERNAL METHODS -===========================================================
         internal override void CheckForExistence()
         {
             // DOES NOT PREVIUOUSLY EXIST
@@ -64,54 +116,28 @@ namespace FileBuilder
                 AddContent(fileContent);
             }
 
-            //saying to the algorithm that the file is already built
+            // saying to the algorithm that the file is already built.
             IsBuilt = true;
         }
-        #endregion =======================================================================================
 
-
-
-
-        #region =========== PUBLIC METHODS ===============================================================
-
-        /// <summary> Adds text to the Content property. </summary>
-        /// <param name="content">The content string to be added.</param>
-        public void AddContent(string content) => Content += content;
-
-        /// <summary> Adds text line to the Content property. </summary>
-        /// <param name="content">The content string line to be added.</param>
-        public void AddContentLine(string content)
-        {
-            if (Content.Length > 0)
-            {
-                Content += $"\n{content}";
-                return;
-            }
-            Content += content;
-        }
-
-        /// <summary> Makes Content property empty. </summary>
-        public void ClearContent() => Content = string.Empty;
-        #endregion ------------------------------------------------------------------------------------------
-
-
-
-
-        #region =========== INTERNAL METHODS ===============================================================
-
-        /// <summary> Creates the real file or updates the existing one. </summary>
         internal override void OnBuild()
         {
+            // updating the unbuild extention text field.
             this.unbuildFileExtentionText = this.fileExtentionText;
+            
+            // instantiating readonly IDisposable object to operate on it.
             using(StreamWriter writer = new StreamWriter(Path, false)){
+                
+                // writing the real file content based on the blueprint's Content string.
                 writer.Write(Content);
+
+                // closing the real file.
                 writer.Close();
             }
         }
 
-        /// <summary> Deletes the real file. </summary>
-        /// <param name="fileBlueprint">The blueprint of the real file to be deleted.</param>
         internal override void OnUnbuild() => File.Delete(UnbuildPath);
-        #endregion =======================================================================================
+        #endregion _______________________________________________________________________________________
+
     }
 }
