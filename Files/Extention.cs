@@ -2,13 +2,14 @@
 {
     /// <summary> 
     /// Extention type of the file.
-    /// Edit it Edit as you see fit.
-    /// Just don't forget to update the ToExtentionString method as well.
+    /// Edit it as you see fit.
+    /// Just don't forget to update the ToExtentionString and ToExtentionEnum methods as well.
     /// </summary>
     public enum Extention { CSharp, HTML, CSS, JavaScript, Text, Bat, Python, None }
 
     internal static class EnumToString
     {
+
         /// <summary>
         /// Converts the extention type enum value into its respective string.
         /// Eg. (Extention.JavaScript) => ".js"
@@ -29,7 +30,6 @@
                 default: return "";
             }
         }
-
 
 
         /// <summary>
