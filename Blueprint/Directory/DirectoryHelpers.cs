@@ -2,9 +2,10 @@
 
 namespace FileBuilder
 {
-    //internal struct DirectoryHelpers -> reference 'bug' since it is a value type. testing with class.
+    // internal struct DirectoryHelpers -> reference 'bug' since struct is a value type.
     internal class DirectoryHelpers
     {
+    // using class then to change the original Caller.
 
 
 
