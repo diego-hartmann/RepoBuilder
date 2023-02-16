@@ -64,7 +64,7 @@ namespace FileBuilder
             // there is not a single item in the list? do nothing.
             if (Caller.ChildFileList.Count < 1) return;
 
-            // otherwise, build all the files inside it.
+            // otherwise, unbuild all the files inside it.
             foreach (Files file in Caller.ChildFileList) file.Unbuild();
         }
         
@@ -82,7 +82,7 @@ namespace FileBuilder
             // there is not a single item in the list? do nothing.
             if (Caller.ChildFolderList.Count == 0) return;
             
-            // Unbuild all the folders inside the list.
+            // otherwise, unbuild all the folders inside the list.
             foreach (Directory folder in Caller.ChildFolderList) folder.Unbuild();
         }
         #endregion _______________________________________________________________________________
