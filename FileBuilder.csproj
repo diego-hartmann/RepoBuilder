@@ -46,14 +46,15 @@
   <ItemGroup>
     <Compile Include="Blueprint\Blueprint.cs" />
     <Compile Include="Builder\Builder.cs" />
-    <Compile Include="Files\Extention.cs" />
-    <Compile Include="Files\Files.cs" />
-    <Compile Include="Files\FileBlueprint.cs" />
-    <Compile Include="Folders\ContainerBlueprint.cs" />
-    <Compile Include="Folders\Folders.cs" />
-    <Compile Include="Folders\FolderBlueprint.cs" />
+    <Compile Include="Blueprint\Files\Extention.cs" />
+    <Compile Include="Blueprint\Files\Files.cs" />
+    <Compile Include="Blueprint\Files\Blueprints\DocumentBlueprint.cs" />
+    <Compile Include="Blueprint\Directory\Blueprints\RootBlueprint.cs" />
+    <Compile Include="Blueprint\Directory\Directory.cs" />
+    <Compile Include="Blueprint\Directory\Blueprints\FolderBlueprint.cs" />
+    <Compile Include="Blueprint\Directory\DirectoryHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Folders\Location.cs" />
+    <Compile Include="Blueprint\Directory\Location.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

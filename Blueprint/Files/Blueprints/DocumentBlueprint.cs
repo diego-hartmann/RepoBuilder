@@ -1,6 +1,6 @@
 ﻿namespace FileBuilder
 {
-    public class FileBlueprint : Files
+    public class DocumentBlueprint : Files
     {
 
 
@@ -10,7 +10,7 @@
         /// <param name="location">The path the real file will be created in.</param>
         /// <param name="name">The name the real file will have.</param>
         /// <param name="extention">The extention of the file.</param>
-        public FileBlueprint(string name, Extention extention) => ConstructorForFile(name, extention);
+        public DocumentBlueprint(string name, Extention extention) => ConstructorForFile(name, extention);
         #endregion _______________________________________________________________________________________
 
 
@@ -24,28 +24,14 @@
         #region ===========- PUBLIC METHODS -===============================================================
         /// <summary> Creates another blueprint based on this. </summary>
         /// <returns>Returns a new object with the same properties.</returns>
-        public FileBlueprint GetCopy()
+        public DocumentBlueprint GetCopy()
         {
             NumberOfCopies++;
             string newName = $"{Name}_{NumberOfCopies}";
-            FileBlueprint duplication = new FileBlueprint(newName, Extention);
+            DocumentBlueprint duplication = new DocumentBlueprint(newName, Extention);
             duplication.AddContent(Content);
             return duplication;
         }
-
-        /// <summary>
-        /// Moves the blueprint to the directory's child list.
-        /// It can be the container or folders.
-        /// The next Build() will create it into the directory.
-        /// </summary>
-        /// <param name="folder">Container of folder.</param>
-        public void MoveTo(Folders folder) => folder.Add(this);
-
-        /// <summary>
-        /// Removes the file from its parent child list.
-        /// The next Build() will delete it from that directory.
-        /// </summary>
-        public void LeaveFolder() => FolderParent?.Remove(this);
         #endregion _______________________________________________________________________________________
     }
 }

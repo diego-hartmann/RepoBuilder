@@ -103,24 +103,27 @@ namespace FileBuilder
         #region ===========- INTERNAL METHODS -===========================================================
         internal override void CheckForExistence()
         {
-            // DOES NOT PREVIUOUSLY EXIST
+            // if the file blueprint does not point to an existing file, do nothing.
             if (!File.Exists(Path)) return;
 
-            // PREVIUOUSLY EXISTS
-            // getting the the real file content
+            // otherwise, get a reader object to read the content of the real file.
             using (StreamReader fileReader = new StreamReader(Path))
             {
+                // then, read the the real file content string and save it in a string,
                 string fileContent = fileReader.ReadToEnd();
+
+                // close the reader object,
                 fileReader.Close();
-                // filling the object content with the real file content
+
+                // fill the blueprint Content property with the real file content string,
                 AddContent(fileContent);
             }
 
-            // saying to the algorithm that the file is already built.
+            // and tell the algorithm that this blueprint is already built.
             IsBuilt = true;
         }
 
-        internal override void OnBuild()
+        protected override void OnBuild()
         {
             // updating the unbuild extention text field.
             this.unbuildFileExtentionText = this.fileExtentionText;
@@ -136,7 +139,7 @@ namespace FileBuilder
             }
         }
 
-        internal override void OnUnbuild() => File.Delete(UnbuildPath);
+        protected override void OnUnbuild() => File.Delete(UnbuildPath);
         #endregion _______________________________________________________________________________________
 
     }

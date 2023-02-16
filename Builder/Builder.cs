@@ -2,10 +2,10 @@
 {
     public static class Builder
     {
-        /// <summary> Creates of updates this Container and its content (folders and files). </summary>
-        public static void Build(this ContainerBlueprint container) => container.Build();
+        /// <summary> Creates of updates this Root and its content (folders and files). </summary>
+        public static void Build(this RootBlueprint Root) => Root.Build();
 
-        /// <summary> Deletes this Container and its content (folders and files). </summary>
-        public static void Unbuild(this ContainerBlueprint container) => container.Unbuild();
+        /// <summary> Deletes this Root and its content (folders and files). </summary>
+        public static void Unbuild(this RootBlueprint Root) => Root.Unbuild();
     }
 }
