@@ -1,4 +1,4 @@
-﻿namespace FileBuilder
+﻿namespace RepoBuilder
 {
     public class DocumentBlueprint : File
     {

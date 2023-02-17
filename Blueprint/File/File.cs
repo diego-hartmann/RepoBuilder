@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
     public abstract class File : Blueprint
     {

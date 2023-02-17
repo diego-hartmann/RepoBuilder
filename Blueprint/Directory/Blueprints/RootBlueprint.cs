@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
 
     /// <summary>
@@ -58,8 +58,8 @@ namespace FileBuilder
 
 
         #region ===========- PUBLIC METHODS -=================================================
-        /// <summary> Moves the directory into another one </summary>
-        /// <param name="location"></param>
+        /// <summary> Moves the Root into another location. </summary>
+        /// <param name="location">The new location.</param>
         public void MoveTo(string location) => Location = location;
         public void MoveTo(Location location) => Location = location.ToLocationString();
         #endregion ___________________________________________________________________________

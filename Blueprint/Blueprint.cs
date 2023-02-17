@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
     public abstract class Blueprint
     {

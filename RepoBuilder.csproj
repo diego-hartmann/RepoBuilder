@@ -7,8 +7,8 @@
     <ProjectGuid>{FBDE429E-C8A7-45F8-84B4-A422F223E3EF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileBuilder</RootNamespace>
-    <AssemblyName>FileBuilder</AssemblyName>
+    <RootNamespace>RepoBuilder</RootNamespace>
+    <AssemblyName>RepoBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

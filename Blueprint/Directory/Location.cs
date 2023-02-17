@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
     /// <summary> Preset folders. </summary>
     public enum Location

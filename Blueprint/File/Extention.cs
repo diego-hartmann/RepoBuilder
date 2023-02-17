@@ -1,4 +1,4 @@
-﻿namespace FileBuilder
+﻿namespace RepoBuilder
 {
     /// <summary> 
     /// Extention type of the file.

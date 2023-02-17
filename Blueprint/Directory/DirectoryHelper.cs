@@ -1,11 +1,10 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
-    // internal struct DirectoryHelpers -> reference 'bug' since struct is a value type.
     internal class DirectoryHelper
     {
-    // using class then to change the original Caller.
 
 
 
@@ -40,52 +39,19 @@ namespace FileBuilder
         /// <summary> Creates or updates the real content inside it. </summary>
         internal void BuildAllContent()
         {
-            BuildFolders();
-            BuildFiles();
+            SetBuildTo(Caller.FolderList);
+            SetBuildTo(Caller.DocumentList);
         }
 
-        /// <summary> Deletes the real content inside it. </summary>
-        internal void UnbuildAllContent()
-        {
-            UnbuildFolders();
-            UnbuildFiles();
-        }
-
-        private void BuildFiles()
+        private void SetBuildTo<T>(List<T> list) where T : Blueprint
         {
             // there is not a single item in the list? do nothing.
-            if (Caller.DocumentList.Count < 1) return;
+            if (list.Count == 0) return;
 
-            // otherwise, build all the files inside it.
-            foreach (DocumentBlueprint doc in Caller.DocumentList) doc.Build();
-        }
-
-        private void UnbuildFiles()
-        {
-            // there is not a single item in the list? do nothing.
-            if (Caller.DocumentList.Count < 1) return;
-
-            // otherwise, unbuild all the files inside it.
-            foreach (DocumentBlueprint doc in Caller.DocumentList) doc.Unbuild();
+            // otherwise, build all the content inside it.
+            foreach (T item in list) item.Build();
         }
         
-        private void BuildFolders()
-        {
-            // there is not a single item in the list? do nothing.
-            if (Caller.FolderList.Count == 0) return;
-
-            // otherwise, build all the folders inside it.
-            foreach (FolderBlueprint folder in Caller.FolderList) folder.Build();
-        }
-
-        private void UnbuildFolders()
-        {
-            // there is not a single item in the list? do nothing.
-            if (Caller.FolderList.Count == 0) return;
-            
-            // otherwise, unbuild all the folders inside the list.
-            foreach (FolderBlueprint folder in Caller.FolderList) folder.Unbuild();
-        }
         #endregion _______________________________________________________________________________
 
 

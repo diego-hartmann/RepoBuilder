@@ -1,4 +1,4 @@
-﻿namespace FileBuilder
+﻿namespace RepoBuilder
 {
     public static class Builder
     {

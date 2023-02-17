@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace FileBuilder
+namespace RepoBuilder
 {
     public abstract class Directory : Blueprint
     {
@@ -69,7 +69,7 @@ namespace FileBuilder
 
         #region ===========- PUBLIC METHODS -=====================================================
         /// <summary>
-        /// Clears the while child list (files and folders).
+        /// Clears the child list (files and folders).
         /// They will all be deleted once the Root calls the Build method again.
         /// </summary>
         public void Clear()
@@ -81,39 +81,35 @@ namespace FileBuilder
         /// <summary> Adds content into child list (files or folders). </summary>
         public void Add(Blueprint content)
         {
-            var helper = Helper;
-
             // Does not add Root since it is already the root.
             if (content is RootBlueprint) return;
 
             // Adds document.
             if (content is DocumentBlueprint)
             {
-                helper.AddFile(content as DocumentBlueprint);
+                Helper.AddFile(content as DocumentBlueprint);
                 return;
             }
 
             // Adds folder.
-            helper.AddFolder(content as FolderBlueprint);
+            Helper.AddFolder(content as FolderBlueprint);
         }
 
         /// <summary> Removes content from child list (files or folders). </summary>
         public void Remove(Blueprint content)
         {
-            var helper = Helper;
-
             // Does not remove Root since it is never added anyways.
             if (content is RootBlueprint) return;
 
             // Removes document.
             if (content is DocumentBlueprint)
             {
-                helper.RemoveFile(content as DocumentBlueprint);
+                Helper.RemoveFile(content as DocumentBlueprint);
                 return;
             }
 
             // Remove folder.
-            helper.RemoveFolder(content as FolderBlueprint);
+            Helper.RemoveFolder(content as FolderBlueprint);
         }
         #endregion _______________________________________________________________________________
 
@@ -128,22 +124,15 @@ namespace FileBuilder
         #region ===========- INTERNAL METHODS -===================================================
         internal override void CheckForExistence()
         {
-            var helper = Helper;
             string _path = $"{Path}/";
 
             // if the Root does not exist, don't do anything.
-            if (!helper.CheckForSelfExistence(_path)) return;
+            if (!Helper.CheckForSelfExistence(_path)) return;
 
             // otherwise, check if its content exists too.
-            helper.CheckForContentExistence(_path);
+            Helper.CheckForContentExistence(_path);
         }
         #endregion _______________________________________________________________________________
-
-
-
-
-
-
 
 
 
