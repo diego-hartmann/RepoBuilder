@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace RepoBuilder
@@ -11,10 +13,39 @@ namespace RepoBuilder
 
 
 
+        #region ===========- PRIVATE FIELDS -===================================================
+        private List<DocumentBlueprint> documentsToBuild = new List<DocumentBlueprint>();
+        private List<DocumentBlueprint> documentsToDelete = new List<DocumentBlueprint>();
+
+        private List<FolderBlueprint> foldersToBuild = new List<FolderBlueprint>();
+        private List<FolderBlueprint> foldersToDelete = new List<FolderBlueprint>();
+        #endregion _____________________________________________________________________________
+
+
+
+
+
+
 
         #region ===========- PROTECTED PROPERTIES -=============================================
         protected override string UnbuildPath => $"{unbuildLocation}/{unbuildName}";
         #endregion _____________________________________________________________________________
+
+
+
+
+
+
+
+
+        #region ===========- PRIVATE METHODS -==================================================
+        private void DefineToDelete<T>(ref T content) where T : Blueprint
+        {
+            foldersToBuild.Remove(content as FolderBlueprint);
+            foldersToDelete.Add(content as FolderBlueprint);
+        }
+        #endregion _____________________________________________________________________________
+
 
 
 
@@ -52,11 +83,29 @@ namespace RepoBuilder
 
         public override string Path => $"{Location}/{Name}" ?? null;
         
-        /// <summary> List of child files. </summary>
-        public List<File> DocumentList { get; protected set; } = new List<File>();
+        /// <summary> List of child document blueprints. </summary>
+        public List<DocumentBlueprint> DocumentList => documentsToBuild;
 
-        /// <summary> List of child folders. </summary>
-        public List<Directory> FolderList { get; protected set; } = new List<Directory>();
+        /// <summary> List of child folder blueprints. </summary>
+        public List<FolderBlueprint> FolderList => foldersToBuild;
+
+        /// <summary> List of every content blueprint inside it. </summary>
+        public List<Blueprint> ContentList
+        {
+            get
+            {
+                // create an empty list of type 'base class' for blueprints,
+                var sumList = new List<Blueprint>();
+
+                // add all the content from the other lists into it,
+                FolderList.ForEach(item => sumList.Add(item));
+                DocumentList.ForEach(item => sumList.Add(item));
+
+                // and return it.
+                return sumList;
+            }
+        }
+
         #endregion _______________________________________________________________________________
 
 
