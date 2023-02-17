@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace FileBuilder
 {
@@ -95,7 +96,7 @@ namespace FileBuilder
         #region =========================- PROTECTED METHODS -====================================================
         /// <summary> Event to be called when the Root is about to unbuild. </summary>
         protected abstract void OnUnbuild();
-        
+
         /// <summary> Event to be called when the Root is about to build. </summary>
         protected abstract void OnBuild();
         #endregion ________________________________________________________________________________________________

@@ -57,7 +57,7 @@ namespace FileBuilder
             if (Caller.ChildFileList.Count < 1) return;
 
             // otherwise, build all the files inside it.
-            foreach (File file in Caller.ChildFileList) file.Build();
+            foreach (DocumentBlueprint doc in Caller.ChildFileList) doc.Build();
         }
 
         private void UnbuildFiles()
@@ -66,7 +66,7 @@ namespace FileBuilder
             if (Caller.ChildFileList.Count < 1) return;
 
             // otherwise, unbuild all the files inside it.
-            foreach (File file in Caller.ChildFileList) file.Unbuild();
+            foreach (DocumentBlueprint doc in Caller.ChildFileList) doc.Unbuild();
         }
         
         private void BuildFolders()
@@ -75,7 +75,7 @@ namespace FileBuilder
             if (Caller.ChildFolderList.Count == 0) return;
 
             // otherwise, build all the folders inside it.
-            foreach (Directory folder in Caller.ChildFolderList) folder.Build();
+            foreach (FolderBlueprint folder in Caller.ChildFolderList) folder.Build();
         }
 
         private void UnbuildFolders()
@@ -84,7 +84,7 @@ namespace FileBuilder
             if (Caller.ChildFolderList.Count == 0) return;
             
             // otherwise, unbuild all the folders inside the list.
-            foreach (Directory folder in Caller.ChildFolderList) folder.Unbuild();
+            foreach (FolderBlueprint folder in Caller.ChildFolderList) folder.Unbuild();
         }
         #endregion _______________________________________________________________________________
 

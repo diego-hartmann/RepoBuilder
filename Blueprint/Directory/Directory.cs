@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace FileBuilder
 {
     public abstract class Directory : Blueprint
     {
-
-
-
-
-
-        #region ===========- PRIVATE FIELDS -===================================================
-        private DirectoryHelpers helper;
-        #endregion _____________________________________________________________________________
-
-
 
 
 
@@ -79,8 +68,10 @@ namespace FileBuilder
         }
 
         /// <summary> Adds content into child list (files or folders). </summary>
-        public void Add<T>(T content) where T : Blueprint
+        public void Add(Blueprint content)
         {
+            var helper = GetHelper();
+
             // Does not add Root since it is already the root.
             if (content is RootBlueprint) return;
 
@@ -96,22 +87,21 @@ namespace FileBuilder
         }
 
         /// <summary> Removes content from child list (files or folders). </summary>
-        public void Remove<T>(T content) where T : Blueprint
+        public void Remove(Blueprint content)
         {
-            // Getting the type of the parameter.
-            var _type = typeof(T);
+            var helper = GetHelper();
 
-            // Does not remove Root since it is never added.
-            if (_type == typeof(RootBlueprint)) return;
+            // Does not remove Root since it is never added anyways.
+            if (content is RootBlueprint) return;
 
-            // Removes file.
-            if (_type == typeof(DocumentBlueprint))
+            // Removes document.
+            if (content is DocumentBlueprint)
             {
                 helper.RemoveFile(content as DocumentBlueprint);
                 return;
             }
 
-            // Removes folder.
+            // Remove folder.
             helper.RemoveFolder(content as FolderBlueprint);
         }
         #endregion _______________________________________________________________________________
@@ -127,6 +117,7 @@ namespace FileBuilder
         #region ===========- INTERNAL METHODS -===================================================
         internal override void CheckForExistence()
         {
+            var helper = GetHelper();
             string _path = $"{Path}/";
 
             // if the Root does not exist, don't do anything.
@@ -144,25 +135,32 @@ namespace FileBuilder
 
 
 
+        private DirectoryHelpers GetHelper() => new DirectoryHelpers(this);
+
+
+
+
+
+
+
 
         #region ===========- PROTECTED METHODS -==================================================
         protected override void OnBuild()
         {
             System.IO.Directory.CreateDirectory(Path);
-            helper.BuildAllContent();
+            GetHelper().BuildAllContent();
         }
 
         protected override void OnUnbuild()
         {
             System.IO.Directory.Delete(UnbuildPath, true);
-            helper.UnbuildAllContent();
+            GetHelper().UnbuildAllContent();
         }
 
         protected void ConstructorForFolder(string name)
         {
             Name = name;
             unbuildName = name;
-            helper = new DirectoryHelpers(this);
         }
 
         protected void ConstructorForRoot(string name, string location)
