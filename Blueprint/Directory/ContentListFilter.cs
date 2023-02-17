@@ -2,9 +2,9 @@
 
 namespace RepoBuilder
 {
-    internal static class Filter
+    internal static class ContentListFilter
     {
-        internal static List<T> OnlyOfType<T>(this List<Blueprint> content) where T : Blueprint
+        internal static List<T> Filter<T>(this List<Blueprint> content) where T : Blueprint
         {
             var newList = new List<T>();
             

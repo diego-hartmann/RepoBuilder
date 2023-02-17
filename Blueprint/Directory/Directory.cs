@@ -65,10 +65,10 @@ namespace RepoBuilder
         public override string Path => $"{Location}/{Name}" ?? null;
 
         /// <summary> List of child document blueprints. </summary>
-        public List<DocumentBlueprint> DocumentList => ContentList.OnlyOfType<DocumentBlueprint>();
+        public List<DocumentBlueprint> DocumentList => ContentList.Filter<DocumentBlueprint>();
 
         /// <summary> List of child folder blueprints. </summary>
-        public List<FolderBlueprint> FolderList => ContentList.OnlyOfType<FolderBlueprint>();
+        public List<FolderBlueprint> FolderList => ContentList.Filter<FolderBlueprint>();
 
         /// <summary> List of every content blueprint inside it. </summary>
         public List<Blueprint> ContentList => contentToBuild;
@@ -107,9 +107,9 @@ namespace RepoBuilder
             if (content is RootBlueprint) return;
 
             // otherwise, add to the list.
-            content.DirectoryParent = null;
-            contentToBuild.Remove(content);
-            contentToUnbuild.Add(content);
+            content.DirectoryParent = this;
+            contentToBuild.Add(content);
+            contentToUnbuild.Remove(content);
         }
 
         /// <summary> Removes blueprint from child list. </summary>

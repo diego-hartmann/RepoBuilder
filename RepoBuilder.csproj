@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blueprint\Blueprint.cs" />
-    <Compile Include="Blueprint\Directory\FilterOnly.cs" />
+    <Compile Include="Blueprint\Directory\ContentListFilter.cs" />
     <Compile Include="Builder\Builder.cs" />
     <Compile Include="Blueprint\File\Extention.cs" />
     <Compile Include="Blueprint\File\File.cs" />
