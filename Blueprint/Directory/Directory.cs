@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace RepoBuilder
@@ -14,11 +13,6 @@ namespace RepoBuilder
 
 
         #region ===========- PRIVATE FIELDS -===================================================
-        //private List<DocumentBlueprint> documentsToBuild = new List<DocumentBlueprint>();
-        //private List<DocumentBlueprint> documentsToDelete = new List<DocumentBlueprint>();
-
-        //private List<FolderBlueprint> foldersToBuild = new List<FolderBlueprint>();
-        //private List<FolderBlueprint> foldersToDelete = new List<FolderBlueprint>();
         private List<Blueprint> contentToBuild = new List<Blueprint>();
         private List<Blueprint> contentToUnbuild = new List<Blueprint>();
         #endregion _____________________________________________________________________________
@@ -31,17 +25,6 @@ namespace RepoBuilder
 
         #region ===========- PROTECTED PROPERTIES -=============================================
         protected override string UnbuildPath => $"{unbuildLocation}/{unbuildName}";
-        #endregion _____________________________________________________________________________
-
-
-
-
-
-
-
-
-        #region ===========- PRIVATE METHODS -==================================================
-
         #endregion _____________________________________________________________________________
 
 
@@ -82,39 +65,13 @@ namespace RepoBuilder
         public override string Path => $"{Location}/{Name}" ?? null;
 
         /// <summary> List of child document blueprints. </summary>
-        public List<DocumentBlueprint> DocumentList
-        {
-            get
-            {
-                var docList = new List<DocumentBlueprint>();
-
-                contentToBuild.ForEach(item =>
-                {
-                    if (item is DocumentBlueprint) docList.Add(item as DocumentBlueprint);
-                });
-                return docList;
-            }
-        }
+        public List<DocumentBlueprint> DocumentList => ContentList.OnlyOfType<DocumentBlueprint>();
 
         /// <summary> List of child folder blueprints. </summary>
-        public List<FolderBlueprint> FolderList
-        {
-            get
-            {
-                var folderList = new List<FolderBlueprint>();
-
-                contentToBuild.ForEach(item =>
-                {
-                    if (item is FolderBlueprint) folderList.Add(item as FolderBlueprint);
-                });
-                return folderList;
-            }
-        }
+        public List<FolderBlueprint> FolderList => ContentList.OnlyOfType<FolderBlueprint>();
 
         /// <summary> List of every content blueprint inside it. </summary>
         public List<Blueprint> ContentList => contentToBuild;
-
-
         #endregion _______________________________________________________________________________
 
 
