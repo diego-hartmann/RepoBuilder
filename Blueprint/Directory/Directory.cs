@@ -41,7 +41,7 @@ namespace RepoBuilder
 
 
         #region ===========- PRIVATE METHODS -==================================================
-        
+
         #endregion _____________________________________________________________________________
 
 
@@ -68,7 +68,7 @@ namespace RepoBuilder
         public override string Location
         {
             get => DirectoryParent?.Path ?? null;
-            
+
             protected set
             {
                 StringBuilder _value = new StringBuilder(value);
@@ -80,7 +80,7 @@ namespace RepoBuilder
         }
 
         public override string Path => $"{Location}/{Name}" ?? null;
-        
+
         /// <summary> List of child document blueprints. </summary>
         public List<DocumentBlueprint> DocumentList
         {
@@ -130,10 +130,14 @@ namespace RepoBuilder
         /// Clears the child list (files and folders).
         /// They will all be deleted once the Root calls the Build method again.
         /// </summary>
-        public void Clear()
-        {
-            DocumentList.Clear();
-            FolderList.Clear();
+        public void Clear() {
+            
+            // unstage all content so they will be unbuilded on the next Build().
+            contentToBuild.ForEach( item => contentToUnbuild.Add(item) );
+            
+            // clear all staged content so they won't be builded on the next Build().
+            contentToBuild.Clear();
+
         }
 
         /// <summary> Adds blueprint into child list. </summary>
