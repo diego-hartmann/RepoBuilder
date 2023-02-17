@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace FileBuilder
@@ -154,7 +155,8 @@ namespace FileBuilder
         protected override void OnUnbuild()
         {
             System.IO.Directory.Delete(UnbuildPath, true);
-            GetHelper().UnbuildAllContent();
+            foreach (var item in ChildFileList) item.IsBuilt = false;
+            foreach (var item in ChildFolderList) item.IsBuilt = false;
         }
 
         protected void ConstructorForFolder(string name)

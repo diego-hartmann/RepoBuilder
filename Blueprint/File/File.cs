@@ -152,7 +152,7 @@ namespace FileBuilder
             }
         }
 
-        protected override void OnUnbuild() => System.IO.File.Delete(UnbuildPath);
+        protected override void OnUnbuild()=> System.IO.File.Delete(UnbuildPath);
         #endregion _______________________________________________________________________________________
 
     }
