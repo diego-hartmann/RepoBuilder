@@ -3,7 +3,7 @@
 namespace FileBuilder
 {
     // internal struct DirectoryHelpers -> reference 'bug' since struct is a value type.
-    internal class DirectoryHelpers
+    internal class DirectoryHelper
     {
     // using class then to change the original Caller.
 
@@ -25,7 +25,7 @@ namespace FileBuilder
         #region ===========- CONSTRUCTOR -========================================================
         /// <summary> Creates a helper object with useful functions. </summary>
         /// <param name="caller">The directory blueprint that called for help.</param>
-        internal DirectoryHelpers(Directory caller) => Caller = caller;
+        internal DirectoryHelper(Directory caller) => Caller = caller;
         #endregion _______________________________________________________________________________
 
 

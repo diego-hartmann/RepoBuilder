@@ -13,8 +13,19 @@ namespace FileBuilder
 
 
 
-        #region ===========- PROTECTED FIELDS -=================================================
+        #region ===========- PROTECTED PROPERTIES -=============================================
         protected override string UnbuildPath => $"{unbuildLocation}/{unbuildName}";
+        #endregion _____________________________________________________________________________
+
+
+
+
+
+
+
+
+        #region ===========- PRIVATE PROPERTIES -===============================================
+        private DirectoryHelper Helper => new DirectoryHelper(this);
         #endregion _____________________________________________________________________________
 
 
@@ -71,7 +82,7 @@ namespace FileBuilder
         /// <summary> Adds content into child list (files or folders). </summary>
         public void Add(Blueprint content)
         {
-            var helper = GetHelper();
+            var helper = Helper;
 
             // Does not add Root since it is already the root.
             if (content is RootBlueprint) return;
@@ -90,7 +101,7 @@ namespace FileBuilder
         /// <summary> Removes content from child list (files or folders). </summary>
         public void Remove(Blueprint content)
         {
-            var helper = GetHelper();
+            var helper = Helper;
 
             // Does not remove Root since it is never added anyways.
             if (content is RootBlueprint) return;
@@ -118,7 +129,7 @@ namespace FileBuilder
         #region ===========- INTERNAL METHODS -===================================================
         internal override void CheckForExistence()
         {
-            var helper = GetHelper();
+            var helper = Helper;
             string _path = $"{Path}/";
 
             // if the Root does not exist, don't do anything.
@@ -136,7 +147,6 @@ namespace FileBuilder
 
 
 
-        private DirectoryHelpers GetHelper() => new DirectoryHelpers(this);
 
 
 
@@ -149,7 +159,7 @@ namespace FileBuilder
         protected override void OnBuild()
         {
             System.IO.Directory.CreateDirectory(Path);
-            GetHelper().BuildAllContent();
+            Helper.BuildAllContent();
         }
 
         protected override void OnUnbuild()

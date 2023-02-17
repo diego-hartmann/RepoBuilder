@@ -52,7 +52,7 @@
     <Compile Include="Blueprint\Directory\Blueprints\RootBlueprint.cs" />
     <Compile Include="Blueprint\Directory\Directory.cs" />
     <Compile Include="Blueprint\Directory\Blueprints\FolderBlueprint.cs" />
-    <Compile Include="Blueprint\Directory\DirectoryHelpers.cs" />
+    <Compile Include="Blueprint\Directory\DirectoryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Blueprint\Directory\Location.cs" />
   </ItemGroup>
