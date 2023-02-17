@@ -110,27 +110,17 @@ namespace FileBuilder
             if (!System.IO.File.Exists(Path)) return;
 
             // otherwise, get a reader object to read the content of the real file.
-            //using (StreamReader fileReader = new StreamReader(Path))
-            //{
-            //    // then, read the the real file content string and save it in a string,
-            //    string fileContent = fileReader.ReadToEnd();
+            using (StreamReader fileReader = new StreamReader(Path))
+            {
+                // then, read the the real file content string and save it in a string,
+                string fileContent = fileReader.ReadToEnd();
 
-            //    // close the reader object,
-            //    fileReader.Close();
+                // close the reader object,
+                fileReader.Close();
 
-            //    // fill the blueprint Content property with the real file content string,
-            //    AddContent(fileContent);
-            //}
-
-            StreamReader fileReader = new StreamReader(Path);
-            // then, read the the real file content string and save it in a string,
-            string fileContent = fileReader.ReadToEnd();
-
-            // close the reader object,
-            fileReader.Close();
-
-            // fill the blueprint Content property with the real file content string,
-            AddContent(fileContent);
+                // fill the blueprint Content property with the real file content string,
+                AddContent(fileContent);
+            }
 
             // and tell the algorithm that this blueprint is already built.
             IsBuilt = true;
