@@ -42,19 +42,20 @@ namespace FileBuilder
         public bool IsBuilt { get; internal set; }
 
         /// <summary> Specifies if this file has folder parent. </summary>
-        public bool HasFolderParent => FolderParent != null;
+        public bool HasDirectoryParent => DirectoryParent != null;
 
         /// <summary> The folder parent of the file. </summary>
-        public Directory FolderParent { get; internal set; }
+        public Directory DirectoryParent { get; internal set; }
 
         /// <summary> Location of the file. </summary>
-        public virtual string Location { get => FolderParent?.Path ?? null; protected set { } }
+        public virtual string Location { get => DirectoryParent?.Path ?? null; protected set { } }
 
         /// <summary> Name of the file. </summary>
         public string Name { get; protected set; }
 
         /// <summary> Complete path of the file, including location, name and extention. </summary>
         public abstract string Path { get; }
+
         #endregion ________________________________________________________________________________________________
 
 
@@ -71,13 +72,13 @@ namespace FileBuilder
         /// The next Build() will create it into the directory.
         /// </summary>
         /// <param name="folder">Directory to be the parent.</param>
-        public void MoveTo(Directory folder) => folder.Add(this);
+        public void MoveTo(Directory directory) => directory.Add(this);
 
         /// <summary>
         /// Removes the file of folder from its parent directory.
         /// The next Build() will delete it from that directory.
         /// </summary>
-        public void LeaveFolder() => FolderParent?.Remove(this);
+        public void LeaveFolder() => DirectoryParent?.Remove(this);
 
         /// <summary> Changes the blueprint's Name property. </summary>
         /// <param name="newName">The new name you want to add to the blueprint.</param>
@@ -124,7 +125,6 @@ namespace FileBuilder
         internal void Unbuild()
         {
             if (!IsBuilt) return;
-            // using the update UnbuildPath to delete the last version of the file
             OnUnbuild();
             IsBuilt = false;
         }

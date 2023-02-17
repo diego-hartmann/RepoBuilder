@@ -142,6 +142,7 @@ namespace FileBuilder
             }
         }
 
+        // using the update UnbuildPath to delete the last version of the file
         protected override void OnUnbuild()=> System.IO.File.Delete(UnbuildPath);
         #endregion _______________________________________________________________________________________
 

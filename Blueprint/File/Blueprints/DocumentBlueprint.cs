@@ -22,7 +22,7 @@
 
 
         #region ===========- PUBLIC METHODS -===============================================================
-        /// <summary> Creates another blueprint based on this. </summary>
+        /// <summary> Creates another document blueprint based on this. </summary>
         /// <returns>Returns a new object with the same properties.</returns>
         public DocumentBlueprint GetCopy()
         {

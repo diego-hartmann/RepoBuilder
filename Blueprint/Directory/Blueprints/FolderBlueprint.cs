@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace FileBuilder
+﻿namespace FileBuilder
 {
     public class FolderBlueprint : Directory
     {
@@ -11,7 +9,7 @@ namespace FileBuilder
 
         
         #region ===========- PUBLIC PROPARTIES -=============================
-        public override string Location => FolderParent?.Path ?? null;
+        public override string Location => DirectoryParent?.Path ?? null;
         #endregion __________________________________________________________
 
     }

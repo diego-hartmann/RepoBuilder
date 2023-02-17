@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace FileBuilder
@@ -39,7 +38,7 @@ namespace FileBuilder
         #region ===========- PUBLIC PROPERTIES -=================================================
         public override string Location
         {
-            get => FolderParent?.Path ?? null;
+            get => DirectoryParent?.Path ?? null;
             
             protected set
             {
@@ -54,10 +53,10 @@ namespace FileBuilder
         public override string Path => $"{Location}/{Name}" ?? null;
         
         /// <summary> List of child files. </summary>
-        public List<File> ChildFileList { get; protected set; } = new List<File>();
+        public List<File> DocumentList { get; protected set; } = new List<File>();
 
         /// <summary> List of child folders. </summary>
-        public List<Directory> ChildFolderList { get; protected set; } = new List<Directory>();
+        public List<Directory> FolderList { get; protected set; } = new List<Directory>();
         #endregion _______________________________________________________________________________
 
 
@@ -75,8 +74,8 @@ namespace FileBuilder
         /// </summary>
         public void Clear()
         {
-            ChildFileList.Clear();
-            ChildFolderList.Clear();
+            DocumentList.Clear();
+            FolderList.Clear();
         }
 
         /// <summary> Adds content into child list (files or folders). </summary>
@@ -159,15 +158,14 @@ namespace FileBuilder
         protected override void OnBuild()
         {
             System.IO.Directory.CreateDirectory(Path);
-            Console.WriteLine(Path);
             Helper.BuildAllContent();
         }
 
         protected override void OnUnbuild()
         {
             System.IO.Directory.Delete(UnbuildPath, true);
-            foreach (var item in ChildFileList) item.IsBuilt = false;
-            foreach (var item in ChildFolderList) item.IsBuilt = false;
+            foreach (var item in DocumentList) item.IsBuilt = false;
+            foreach (var item in FolderList) item.IsBuilt = false;
         }
 
         protected void ConstructorForFolder(string name)

@@ -54,37 +54,37 @@ namespace FileBuilder
         private void BuildFiles()
         {
             // there is not a single item in the list? do nothing.
-            if (Caller.ChildFileList.Count < 1) return;
+            if (Caller.DocumentList.Count < 1) return;
 
             // otherwise, build all the files inside it.
-            foreach (DocumentBlueprint doc in Caller.ChildFileList) doc.Build();
+            foreach (DocumentBlueprint doc in Caller.DocumentList) doc.Build();
         }
 
         private void UnbuildFiles()
         {
             // there is not a single item in the list? do nothing.
-            if (Caller.ChildFileList.Count < 1) return;
+            if (Caller.DocumentList.Count < 1) return;
 
             // otherwise, unbuild all the files inside it.
-            foreach (DocumentBlueprint doc in Caller.ChildFileList) doc.Unbuild();
+            foreach (DocumentBlueprint doc in Caller.DocumentList) doc.Unbuild();
         }
         
         private void BuildFolders()
         {
             // there is not a single item in the list? do nothing.
-            if (Caller.ChildFolderList.Count == 0) return;
+            if (Caller.FolderList.Count == 0) return;
 
             // otherwise, build all the folders inside it.
-            foreach (FolderBlueprint folder in Caller.ChildFolderList) folder.Build();
+            foreach (FolderBlueprint folder in Caller.FolderList) folder.Build();
         }
 
         private void UnbuildFolders()
         {
             // there is not a single item in the list? do nothing.
-            if (Caller.ChildFolderList.Count == 0) return;
+            if (Caller.FolderList.Count == 0) return;
             
             // otherwise, unbuild all the folders inside the list.
-            foreach (FolderBlueprint folder in Caller.ChildFolderList) folder.Unbuild();
+            foreach (FolderBlueprint folder in Caller.FolderList) folder.Unbuild();
         }
         #endregion _______________________________________________________________________________
 
@@ -102,10 +102,10 @@ namespace FileBuilder
         internal void AddFile(DocumentBlueprint documentBlueprint)
         {
             // same blueprint than any in list? then don't add.
-            if (Caller.ChildFileList.Contains(documentBlueprint)) return;
+            if (Caller.DocumentList.Contains(documentBlueprint)) return;
 
             // same assignature than any into list? then don't add.
-            foreach (var item in Caller.ChildFileList)
+            foreach (var item in Caller.DocumentList)
             {
                 if (item.Name == documentBlueprint.Name && item.Extention == documentBlueprint.Extention)
                 {
@@ -114,9 +114,9 @@ namespace FileBuilder
             }
 
             // ok, you can add.
-            documentBlueprint.FolderParent = Caller;
+            documentBlueprint.DirectoryParent = Caller;
             documentBlueprint.CheckForExistence();
-            Caller.ChildFileList.Add(documentBlueprint);
+            Caller.DocumentList.Add(documentBlueprint);
         }
 
         /// <summary> Removes a file from the child list of this directory. </summary>
@@ -124,11 +124,11 @@ namespace FileBuilder
         internal void RemoveFile(DocumentBlueprint documentBlueprint)
         {
             // if it is not in the list, does nothing.
-            if (!Caller.ChildFileList.Contains(documentBlueprint)) return;
+            if (!Caller.DocumentList.Contains(documentBlueprint)) return;
 
             // removes from the list.
-            documentBlueprint.FolderParent = null;
-            Caller.ChildFileList.Remove(documentBlueprint);
+            documentBlueprint.DirectoryParent = null;
+            Caller.DocumentList.Remove(documentBlueprint);
             documentBlueprint.IsBuilt = false;
         }
 
@@ -138,18 +138,18 @@ namespace FileBuilder
         
         {
             // same blueprint than any in list? then don't add.
-            if (Caller.ChildFolderList.Contains(folderBlueprint)) return;
+            if (Caller.FolderList.Contains(folderBlueprint)) return;
 
             // same assignature than any in list? then don't add.
-            foreach (var item in Caller.ChildFolderList)
+            foreach (var item in Caller.FolderList)
             {
                 if (item.Name == folderBlueprint.Name) return;
             }
 
             // ok, you can add.
-            folderBlueprint.FolderParent = Caller;
+            folderBlueprint.DirectoryParent = Caller;
             folderBlueprint.CheckForExistence();
-            Caller.ChildFolderList.Add(folderBlueprint);
+            Caller.FolderList.Add(folderBlueprint);
         }
 
         /// <summary> Removes a folder from the child list of this directory. </summary>
@@ -157,12 +157,12 @@ namespace FileBuilder
         internal void RemoveFolder(FolderBlueprint folderBlueprint)
         {
             // if it is not in the list, does nothing.
-            if (!Caller.ChildFolderList.Contains(folderBlueprint)) return;
+            if (!Caller.FolderList.Contains(folderBlueprint)) return;
 
             // removes from the list.
-            folderBlueprint.FolderParent = null;
-            Caller.ChildFolderList.Remove(folderBlueprint);
-            Caller.FolderParent.IsBuilt = false;
+            folderBlueprint.DirectoryParent = null;
+            Caller.FolderList.Remove(folderBlueprint);
+            Caller.DirectoryParent.IsBuilt = false;
         }
         #endregion _______________________________________________________________________________
 
@@ -199,36 +199,36 @@ namespace FileBuilder
         {
             // check if there is any content inside this previus existing directory.
             CheckForContentExistence_Folders(_path);
-            CheckForContentExistence_Files(_path);
+            CheckForContentExistence_Documents(_path);
         }
 
-        private void CheckForContentExistence_Files(string __path)
+        private void CheckForContentExistence_Documents(string __path)
         {
             try
             {
-                // get the files' paths array from the this directory,
-                string[] files = System.IO.Directory.GetFiles(__path);
+                // get the docs' paths array from the this directory,
+                string[] documentsPaths = System.IO.Directory.GetFiles(__path);
 
                 // then loop throught this array for each path string,
-                foreach (string file in files)
+                foreach (string docPath in documentsPaths)
                 {
-                    // save the name of, by removing the location string before it,
-                    string nameWithExtention = (file.Replace(__path, ""));
+                    // save the name, by removing the location string before it,
+                    string nameWithExtention = (docPath.Replace(__path, ""));
 
                     // remove the extention text from the file name,
-                    string _name = System.IO.Path.GetFileNameWithoutExtension(nameWithExtention);
+                    string _name = Path.GetFileNameWithoutExtension(nameWithExtention);
 
                     // get the extention enum value from extention text and save it,
-                    Extention _extention = ((new FileInfo(file)).Extension).Replace(".", "").ToExtentionEnum();
+                    Extention _extention = ((new FileInfo(docPath)).Extension).Replace(".", "").ToExtentionEnum();
 
-                    // create a blueprint for this existing file using the current _name and _extention fields from the loop,
-                    var _file = new DocumentBlueprint(_name, _extention);
+                    // create a blueprint for this existing document using the current _name and _extention fields from the loop,
+                    var doc = new DocumentBlueprint(_name, _extention);
 
                     // tell the algorithm that this file blueprint is already built,
-                    _file.IsBuilt = true;
+                    doc.IsBuilt = true;
 
-                    // add it to the list of this Root.
-                    Caller.Add(_file);
+                    // add it to the list of its parent.
+                    Caller.Add(doc);
                 }
             }
             finally
@@ -241,11 +241,11 @@ namespace FileBuilder
         {
             try
             {
-                // get the folders' names array from the this directory,
-                string[] folders = System.IO.Directory.GetDirectories(__path);
+                // get the folders' paths array from the this directory,
+                string[] folderPaths = System.IO.Directory.GetDirectories(__path);
 
                 // then loop throught this array for each path string,
-                foreach (string folderPath in folders)
+                foreach (string folderPath in folderPaths)
                 {
                     // create a name for it,
                     string _name = folderPath.Replace(__path, "");
