@@ -14,11 +14,13 @@ namespace RepoBuilder
 
 
         #region ===========- PRIVATE FIELDS -===================================================
-        private List<DocumentBlueprint> documentsToBuild = new List<DocumentBlueprint>();
-        private List<DocumentBlueprint> documentsToDelete = new List<DocumentBlueprint>();
+        //private List<DocumentBlueprint> documentsToBuild = new List<DocumentBlueprint>();
+        //private List<DocumentBlueprint> documentsToDelete = new List<DocumentBlueprint>();
 
-        private List<FolderBlueprint> foldersToBuild = new List<FolderBlueprint>();
-        private List<FolderBlueprint> foldersToDelete = new List<FolderBlueprint>();
+        //private List<FolderBlueprint> foldersToBuild = new List<FolderBlueprint>();
+        //private List<FolderBlueprint> foldersToDelete = new List<FolderBlueprint>();
+        private List<Blueprint> contentToBuild = new List<Blueprint>();
+        private List<Blueprint> contentToUnbuild = new List<Blueprint>();
         #endregion _____________________________________________________________________________
 
 
@@ -39,11 +41,7 @@ namespace RepoBuilder
 
 
         #region ===========- PRIVATE METHODS -==================================================
-        private void DefineToDelete<T>(ref T content) where T : Blueprint
-        {
-            foldersToBuild.Remove(content as FolderBlueprint);
-            foldersToDelete.Add(content as FolderBlueprint);
-        }
+        
         #endregion _____________________________________________________________________________
 
 
@@ -84,27 +82,38 @@ namespace RepoBuilder
         public override string Path => $"{Location}/{Name}" ?? null;
         
         /// <summary> List of child document blueprints. </summary>
-        public List<DocumentBlueprint> DocumentList => documentsToBuild;
-
-        /// <summary> List of child folder blueprints. </summary>
-        public List<FolderBlueprint> FolderList => foldersToBuild;
-
-        /// <summary> List of every content blueprint inside it. </summary>
-        public List<Blueprint> ContentList
+        public List<DocumentBlueprint> DocumentList
         {
             get
             {
-                // create an empty list of type 'base class' for blueprints,
-                var sumList = new List<Blueprint>();
+                var docList = new List<DocumentBlueprint>();
 
-                // add all the content from the other lists into it,
-                FolderList.ForEach(item => sumList.Add(item));
-                DocumentList.ForEach(item => sumList.Add(item));
-
-                // and return it.
-                return sumList;
+                contentToBuild.ForEach(item =>
+                {
+                    if (item is DocumentBlueprint) docList.Add(item as DocumentBlueprint);
+                });
+                return docList;
             }
         }
+
+        /// <summary> List of child folder blueprints. </summary>
+        public List<FolderBlueprint> FolderList
+        {
+            get
+            {
+                var folderList = new List<FolderBlueprint>();
+
+                contentToBuild.ForEach(item =>
+                {
+                    if (item is FolderBlueprint) folderList.Add(item as FolderBlueprint);
+                });
+                return folderList;
+            }
+        }
+
+        /// <summary> List of every content blueprint inside it. </summary>
+        public List<Blueprint> ContentList => contentToBuild;
+
 
         #endregion _______________________________________________________________________________
 
@@ -127,38 +136,34 @@ namespace RepoBuilder
             FolderList.Clear();
         }
 
-        /// <summary> Adds content into child list (files or folders). </summary>
+        /// <summary> Adds blueprint into child list. </summary>
         public void Add(Blueprint content)
         {
-            // Does not add Root since it is already the root.
+            // if it is in the list, does nothing.
+            if (ContentList.Contains(content)) return;
+
+            // does not add Root since it is never a child.
             if (content is RootBlueprint) return;
 
-            // Adds document.
-            if (content is DocumentBlueprint)
-            {
-                Helper.AddFile(content as DocumentBlueprint);
-                return;
-            }
-
-            // Adds folder.
-            Helper.AddFolder(content as FolderBlueprint);
+            // otherwise, add to the list.
+            content.DirectoryParent = null;
+            contentToBuild.Remove(content);
+            contentToUnbuild.Add(content);
         }
 
-        /// <summary> Removes content from child list (files or folders). </summary>
+        /// <summary> Removes blueprint from child list. </summary>
         public void Remove(Blueprint content)
         {
-            // Does not remove Root since it is never added anyways.
+            // if it is not in the list, does nothing.
+            if (!ContentList.Contains(content)) return;
+
+            // does not remove Root since it is never added anyways.
             if (content is RootBlueprint) return;
 
-            // Removes document.
-            if (content is DocumentBlueprint)
-            {
-                Helper.RemoveFile(content as DocumentBlueprint);
-                return;
-            }
-
-            // Remove folder.
-            Helper.RemoveFolder(content as FolderBlueprint);
+            // otherwise, remove from the list.
+            content.DirectoryParent = null;
+            contentToBuild.Remove(content);
+            contentToUnbuild.Add(content);
         }
         #endregion _______________________________________________________________________________
 
@@ -196,7 +201,10 @@ namespace RepoBuilder
         protected override void OnBuild()
         {
             System.IO.Directory.CreateDirectory(Path);
-            Helper.BuildAllContent();
+
+            // updates the existence of its child blueprint content list.
+            contentToBuild.ForEach(item => item.Build());
+            contentToUnbuild.ForEach(item => item.Unbuild());
         }
 
         protected override void OnUnbuild()

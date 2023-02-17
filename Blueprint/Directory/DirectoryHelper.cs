@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RepoBuilder
 {
@@ -37,100 +38,10 @@ namespace RepoBuilder
 
         #region ===========- BUILD METHODS -======================================================
         /// <summary> Creates or updates the real content inside it. </summary>
-        internal void BuildAllContent()
-        {
-            SetBuildTo(Caller.FolderList);
-            SetBuildTo(Caller.DocumentList);
-        }
 
-        private void SetBuildTo<T>(List<T> list) where T : Blueprint
-        {
-            // there is not a single item in the list? do nothing.
-            if (list.Count == 0) return;
-
-            // otherwise, build all the content inside it.
-            foreach (T item in list) item.Build();
-        }
-        
         #endregion _______________________________________________________________________________
 
 
-
-
-
-
-
-
-        #region ===========- CHILD-LIST/CONTENT METHODS -=========================================
-
-        /// <summary> Adds a file inside the child list of this directory. </summary>
-        /// <param name="documentBlueprint">The file blueprint you want to add.</param>
-        internal void AddFile(DocumentBlueprint documentBlueprint)
-        {
-            // same blueprint than any in list? then don't add.
-            if (Caller.DocumentList.Contains(documentBlueprint)) return;
-
-            // same assignature than any into list? then don't add.
-            foreach (var item in Caller.DocumentList)
-            {
-                if (item.Name == documentBlueprint.Name && item.Extention == documentBlueprint.Extention)
-                {
-                    return;
-                }
-            }
-
-            // ok, you can add.
-            documentBlueprint.DirectoryParent = Caller;
-            documentBlueprint.CheckForExistence();
-            Caller.DocumentList.Add(documentBlueprint);
-        }
-
-        /// <summary> Removes a file from the child list of this directory. </summary>
-        /// <param name="documentBlueprint">The file blueprint you want to remove.</param>
-        internal void RemoveFile(DocumentBlueprint documentBlueprint)
-        {
-            // if it is not in the list, does nothing.
-            if (!Caller.DocumentList.Contains(documentBlueprint)) return;
-
-            // removes from the list.
-            documentBlueprint.DirectoryParent = null;
-            Caller.DocumentList.Remove(documentBlueprint);
-            documentBlueprint.IsBuilt = false;
-        }
-
-        /// <summary> Adds a folder inside the child list of this directory. </summary>
-        /// <param name="folderBlueprint">The folder blueprint you want to add.</param>
-        internal void AddFolder(FolderBlueprint folderBlueprint)
-        
-        {
-            // same blueprint than any in list? then don't add.
-            if (Caller.FolderList.Contains(folderBlueprint)) return;
-
-            // same assignature than any in list? then don't add.
-            foreach (var item in Caller.FolderList)
-            {
-                if (item.Name == folderBlueprint.Name) return;
-            }
-
-            // ok, you can add.
-            folderBlueprint.DirectoryParent = Caller;
-            folderBlueprint.CheckForExistence();
-            Caller.FolderList.Add(folderBlueprint);
-        }
-
-        /// <summary> Removes a folder from the child list of this directory. </summary>
-        /// <param name="documentBlueprint">The folder blueprint you want to remove.</param>
-        internal void RemoveFolder(FolderBlueprint folderBlueprint)
-        {
-            // if it is not in the list, does nothing.
-            if (!Caller.FolderList.Contains(folderBlueprint)) return;
-
-            // removes from the list.
-            folderBlueprint.DirectoryParent = null;
-            Caller.FolderList.Remove(folderBlueprint);
-            Caller.DirectoryParent.IsBuilt = false;
-        }
-        #endregion _______________________________________________________________________________
 
 
 
