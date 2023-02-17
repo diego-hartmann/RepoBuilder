@@ -14,8 +14,21 @@ namespace FileBuilder
         protected string unbuildFileExtentionText = String.Empty;
 
         /// <summary> Path used in the Unbuild method to correctly unbuild the old version without creating a copy. </summary>
-        protected string UnbuildPath => $"{unbuildLocation}/{unbuildName}.{unbuildFileExtentionText}";
+        protected abstract string UnbuildPath { get; }
         #endregion ________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+        #region =========================- PROTECTED PROPERTIES -==================================================
+        protected string location = String.Empty;
+        #endregion ________________________________________________________________________________________________
+
 
 
 

@@ -1,6 +1,6 @@
 ﻿namespace FileBuilder
 {
-    public class DocumentBlueprint : Files
+    public class DocumentBlueprint : File
     {
 
 

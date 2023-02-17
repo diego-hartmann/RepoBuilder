@@ -2,7 +2,7 @@
 
 namespace FileBuilder
 {
-    public abstract class Files : Blueprint
+    public abstract class File : Blueprint
     {
 
 
@@ -54,6 +54,9 @@ namespace FileBuilder
         /// <summary> Complete path of the file, including location, name and extention (readonly). </summary>
         public override string Path => $"{Location}/{Name}.{fileExtentionText}";
 
+        /// <summary> Complete path of the old file, including location, name and extention (readonly). </summary>
+        protected override string UnbuildPath => $"{unbuildLocation}/{unbuildName}.{unbuildFileExtentionText}";
+
         /// <summary> The content inside the file (readonly). </summary>
         public string Content { get; private set; } = string.Empty;
 
@@ -104,20 +107,30 @@ namespace FileBuilder
         internal override void CheckForExistence()
         {
             // if the file blueprint does not point to an existing file, do nothing.
-            if (!File.Exists(Path)) return;
+            if (!System.IO.File.Exists(Path)) return;
 
             // otherwise, get a reader object to read the content of the real file.
-            using (StreamReader fileReader = new StreamReader(Path))
-            {
-                // then, read the the real file content string and save it in a string,
-                string fileContent = fileReader.ReadToEnd();
+            //using (StreamReader fileReader = new StreamReader(Path))
+            //{
+            //    // then, read the the real file content string and save it in a string,
+            //    string fileContent = fileReader.ReadToEnd();
 
-                // close the reader object,
-                fileReader.Close();
+            //    // close the reader object,
+            //    fileReader.Close();
 
-                // fill the blueprint Content property with the real file content string,
-                AddContent(fileContent);
-            }
+            //    // fill the blueprint Content property with the real file content string,
+            //    AddContent(fileContent);
+            //}
+
+            StreamReader fileReader = new StreamReader(Path);
+            // then, read the the real file content string and save it in a string,
+            string fileContent = fileReader.ReadToEnd();
+
+            // close the reader object,
+            fileReader.Close();
+
+            // fill the blueprint Content property with the real file content string,
+            AddContent(fileContent);
 
             // and tell the algorithm that this blueprint is already built.
             IsBuilt = true;
@@ -139,7 +152,7 @@ namespace FileBuilder
             }
         }
 
-        protected override void OnUnbuild() => File.Delete(UnbuildPath);
+        protected override void OnUnbuild() => System.IO.File.Delete(UnbuildPath);
         #endregion _______________________________________________________________________________________
 
     }

@@ -24,8 +24,7 @@ namespace FileBuilder
 
 
         #region ===========- PROTECTED FIELDS -=================================================
-        protected string location = String.Empty;
-        protected string unbuildLPath => $"{unbuildLocation}/{unbuildName}";
+        protected override string UnbuildPath => $"{unbuildLocation}/{unbuildName}";
         #endregion _____________________________________________________________________________
 
 
@@ -54,7 +53,7 @@ namespace FileBuilder
         public override string Path => $"{Location}/{Name}" ?? null;
         
         /// <summary> List of child files. </summary>
-        public List<Files> ChildFileList { get; protected set; } = new List<Files>();
+        public List<File> ChildFileList { get; protected set; } = new List<File>();
 
         /// <summary> List of child folders. </summary>
         public List<Directory> ChildFolderList { get; protected set; } = new List<Directory>();
@@ -82,14 +81,11 @@ namespace FileBuilder
         /// <summary> Adds content into child list (files or folders). </summary>
         public void Add<T>(T content) where T : Blueprint
         {
-            // Getting the type of the parameter.
-            var _type = typeof(T);
-
             // Does not add Root since it is already the root.
-            if (_type == typeof(RootBlueprint)) return;
+            if (content is RootBlueprint) return;
 
-            // Adds file.
-            if (_type == typeof(DocumentBlueprint))
+            // Adds document.
+            if (content is DocumentBlueprint)
             {
                 helper.AddFile(content as DocumentBlueprint);
                 return;
@@ -158,7 +154,7 @@ namespace FileBuilder
 
         protected override void OnUnbuild()
         {
-            System.IO.Directory.Delete(unbuildLPath, true);
+            System.IO.Directory.Delete(UnbuildPath, true);
             helper.UnbuildAllContent();
         }
 

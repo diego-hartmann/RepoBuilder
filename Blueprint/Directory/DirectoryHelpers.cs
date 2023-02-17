@@ -57,7 +57,7 @@ namespace FileBuilder
             if (Caller.ChildFileList.Count < 1) return;
 
             // otherwise, build all the files inside it.
-            foreach (Files file in Caller.ChildFileList) file.Build();
+            foreach (File file in Caller.ChildFileList) file.Build();
         }
 
         private void UnbuildFiles()
@@ -66,7 +66,7 @@ namespace FileBuilder
             if (Caller.ChildFileList.Count < 1) return;
 
             // otherwise, unbuild all the files inside it.
-            foreach (Files file in Caller.ChildFileList) file.Unbuild();
+            foreach (File file in Caller.ChildFileList) file.Unbuild();
         }
         
         private void BuildFolders()
@@ -98,43 +98,44 @@ namespace FileBuilder
         #region ===========- CHILD-LIST/CONTENT METHODS -=========================================
 
         /// <summary> Adds a file inside the child list of this directory. </summary>
-        /// <param name="fileBlueprint">The file blueprint you want to add.</param>
-        internal void AddFile(Files fileBlueprint)
+        /// <param name="documentBlueprint">The file blueprint you want to add.</param>
+        internal void AddFile(DocumentBlueprint documentBlueprint)
         {
             // same blueprint than any in list? then don't add.
-            if (Caller.ChildFileList.Contains(fileBlueprint)) return;
+            if (Caller.ChildFileList.Contains(documentBlueprint)) return;
 
             // same assignature than any into list? then don't add.
             foreach (var item in Caller.ChildFileList)
             {
-                if (item.Name == fileBlueprint.Name && item.Extention == fileBlueprint.Extention)
+                if (item.Name == documentBlueprint.Name && item.Extention == documentBlueprint.Extention)
                 {
                     return;
                 }
             }
 
             // ok, you can add.
-            fileBlueprint.CheckForExistence();
-            fileBlueprint.FolderParent = Caller;
-            Caller.Add(fileBlueprint);
+            documentBlueprint.FolderParent = Caller;
+            documentBlueprint.CheckForExistence();
+            Caller.ChildFileList.Add(documentBlueprint);
         }
 
         /// <summary> Removes a file from the child list of this directory. </summary>
-        /// <param name="fileBlueprint">The file blueprint you want to remove.</param>
-        internal void RemoveFile(Files fileBlueprint)
+        /// <param name="documentBlueprint">The file blueprint you want to remove.</param>
+        internal void RemoveFile(DocumentBlueprint documentBlueprint)
         {
             // if it is not in the list, does nothing.
-            if (!Caller.ChildFileList.Contains(fileBlueprint)) return;
+            if (!Caller.ChildFileList.Contains(documentBlueprint)) return;
 
             // removes from the list.
-            fileBlueprint.FolderParent = null;
-            Caller.ChildFileList.Remove(fileBlueprint);
-            fileBlueprint.IsBuilt = false;
+            documentBlueprint.FolderParent = null;
+            Caller.ChildFileList.Remove(documentBlueprint);
+            documentBlueprint.IsBuilt = false;
         }
 
         /// <summary> Adds a folder inside the child list of this directory. </summary>
         /// <param name="folderBlueprint">The folder blueprint you want to add.</param>
-        internal void AddFolder(Directory folderBlueprint)
+        internal void AddFolder(FolderBlueprint folderBlueprint)
+        
         {
             // same blueprint than any in list? then don't add.
             if (Caller.ChildFolderList.Contains(folderBlueprint)) return;
@@ -152,8 +153,8 @@ namespace FileBuilder
         }
 
         /// <summary> Removes a folder from the child list of this directory. </summary>
-        /// <param name="fileBlueprint">The folder blueprint you want to remove.</param>
-        internal void RemoveFolder(Directory folderBlueprint)
+        /// <param name="documentBlueprint">The folder blueprint you want to remove.</param>
+        internal void RemoveFolder(FolderBlueprint folderBlueprint)
         {
             // if it is not in the list, does nothing.
             if (!Caller.ChildFolderList.Contains(folderBlueprint)) return;

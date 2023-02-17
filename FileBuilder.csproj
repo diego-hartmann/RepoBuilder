@@ -46,9 +46,9 @@
   <ItemGroup>
     <Compile Include="Blueprint\Blueprint.cs" />
     <Compile Include="Builder\Builder.cs" />
-    <Compile Include="Blueprint\Files\Extention.cs" />
-    <Compile Include="Blueprint\Files\Files.cs" />
-    <Compile Include="Blueprint\Files\Blueprints\DocumentBlueprint.cs" />
+    <Compile Include="Blueprint\File\Extention.cs" />
+    <Compile Include="Blueprint\File\File.cs" />
+    <Compile Include="Blueprint\File\Blueprints\DocumentBlueprint.cs" />
     <Compile Include="Blueprint\Directory\Blueprints\RootBlueprint.cs" />
     <Compile Include="Blueprint\Directory\Directory.cs" />
     <Compile Include="Blueprint\Directory\Blueprints\FolderBlueprint.cs" />
