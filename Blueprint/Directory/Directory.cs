@@ -210,8 +210,9 @@ namespace RepoBuilder
         protected override void OnUnbuild()
         {
             System.IO.Directory.Delete(UnbuildPath, true);
-            foreach (var item in DocumentList) item.IsBuilt = false;
-            foreach (var item in FolderList) item.IsBuilt = false;
+
+            // tell the algorithm that the content list is not builded anymore.
+            ContentList.ForEach( item => item.IsBuilt = false );
         }
 
         protected void ConstructorForFolder(string name)
