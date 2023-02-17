@@ -1,4 +1,6 @@
-﻿namespace FileBuilder
+﻿using System.Text;
+
+namespace FileBuilder
 {
 
     /// <summary>
@@ -31,8 +33,31 @@
 
 
 
+        #region ===========- PUBLIC PROPERTIES -==============================================
+        public override string Location
+        {
+            get => location;
 
-        #region ===========- CONSTRUCTORS -===================================================
+            protected set
+            {
+                StringBuilder _value = new StringBuilder(value);
+                _value.Replace("\\", "/");
+                _value.Replace("//", "/");
+                _value.Replace("/", "/");
+                location = _value.ToString();
+            }
+        }
+        #endregion ___________________________________________________________________________
+
+
+
+
+
+
+
+
+
+        #region ===========- PUBLIC METHODS -=================================================
         /// <summary> Moves the directory into another one </summary>
         /// <param name="location"></param>
         public void MoveTo(string location) => Location = location;

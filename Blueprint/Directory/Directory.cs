@@ -159,6 +159,7 @@ namespace FileBuilder
         protected override void OnBuild()
         {
             System.IO.Directory.CreateDirectory(Path);
+            Console.WriteLine(Path);
             Helper.BuildAllContent();
         }
 
