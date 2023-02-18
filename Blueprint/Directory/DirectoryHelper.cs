@@ -63,7 +63,6 @@ namespace RepoBuilder
 
         private void CheckForContentExistence_Documents(string __path)
         {
-           
             // get the docs' paths array from the this directory,
             string[] documentsPaths = System.IO.Directory.GetFiles(__path);
 

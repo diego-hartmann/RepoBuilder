@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -95,7 +96,6 @@ namespace RepoBuilder
             
             // clear all staged content so they won't be builded on the next Build().
             contentToBuild.Clear();
-
         }
 
         /// <summary> Adds blueprint into child list. </summary>
@@ -104,13 +104,35 @@ namespace RepoBuilder
             // if it is in the list, does nothing.
             if (ContentList.Contains(content)) return;
 
-            // does not add Root since it is never a child.
+            // if it is a document...
+            if(content is DocumentBlueprint) {
+                // compare to the existing ones,
+                DocumentList.ForEach( item =>
+                {
+                    bool sameName = item.Name == content.Name;
+                    bool sameExtention = item.Extention == (content as DocumentBlueprint).Extention;
+                    // and if maches the same assignature, do nothing.
+                    if (sameName && sameExtention) return;
+                });
+            }
+            
+            // if it is a folder...
+            if (content is FolderBlueprint)
+            {
+                // compare to the existing ones,
+                FolderList.ForEach( item =>
+                {
+                    bool sameName = item.Name == content.Name;
+                    // and if maches the same assignature, do nothing.
+                    if (sameName) return;
+                });
+            }
+
+            // does not add Root since it must not be a child.
             if (content is RootBlueprint) return;
 
             // otherwise, add to the list.
-            content.DirectoryParent = this;
-            contentToBuild.Add(content);
-            contentToUnbuild.Remove(content);
+            StageToBuild(content);
 
             // then, see if this blueprint points to an existing content.
             content.CheckIfPointsToExistingContent();
@@ -126,9 +148,7 @@ namespace RepoBuilder
             if (content is RootBlueprint) return;
 
             // otherwise, remove from the list.
-            content.DirectoryParent = null;
-            contentToBuild.Remove(content);
-            contentToUnbuild.Add(content);
+            StageToUnbuild(content);
         }
         #endregion _______________________________________________________________________________
 
@@ -143,7 +163,8 @@ namespace RepoBuilder
         #region ===========- INTERNAL METHODS -===================================================
         internal override void CheckIfPointsToExistingContent()
         {
-            string _path = $"{Path}/";
+            //string _path = $"{Path}/";
+            string _path = Path;
 
             // if this blueprint does not point to an existing directory, don't do anything.
             if(!Helper.CheckForSelfExistence(_path)) return;
@@ -151,7 +172,8 @@ namespace RepoBuilder
             // otherwise, tell the algorithm this directory is already built
             IsBuilt = true;
 
-            if(this is FolderBlueprint) // can not be added if is Root
+            // can only be added into list if is not Root directory, but a Folder directory.
+            if(this is FolderBlueprint)
             { 
                 // create a blueprint for it,
                 var newBlueprint = new FolderBlueprint(Name);
@@ -159,7 +181,7 @@ namespace RepoBuilder
                 DirectoryParent.Add(newBlueprint);
             }
             
-            // now, check if its real content exists too to create blueprints inside this list.
+            // now, check there is any real content inside it to create blueprints inside this list.
             Helper.CheckForContentExistence(_path);
         }
         #endregion _______________________________________________________________________________
@@ -207,5 +229,29 @@ namespace RepoBuilder
             CheckIfPointsToExistingContent();
         }
         #endregion _______________________________________________________________________________
+
+
+
+
+
+
+
+
+
+        #region ===========- PRIVATE METHODS -==================================================
+        private void StageToBuild(Blueprint content)
+        {
+            content.DirectoryParent = this;
+            contentToBuild.Add(content);
+            contentToUnbuild.Remove(content);
+        }
+        private void StageToUnbuild(Blueprint content)
+        {
+            content.DirectoryParent = null;
+            contentToBuild.Remove(content);
+            contentToUnbuild.Add(content);
+        }
+        #endregion _______________________________________________________________________________
+
     }
 }

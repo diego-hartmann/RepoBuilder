@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="extentionValue">The enum value to be converted.</param>
         /// <returns></returns>
-        internal static string ToExtentionString(this Extention extentionValue)
+        public static string ToExtentionString(this Extention extentionValue)
         {
             switch (extentionValue)
             {
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="extentionValue">The enum value to be converted.</param>
         /// <returns></returns>
-        internal static Extention ToExtentionEnum(this string extention)
+        public static Extention ToExtentionEnum(this string extention)
         {
             switch (extention)
             {
