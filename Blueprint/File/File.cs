@@ -104,7 +104,7 @@ namespace RepoBuilder
 
 
         #region ===========- INTERNAL METHODS -===========================================================
-        internal override void CheckForExistence()
+        internal override void CheckIfPointsToExistingContent()
         {
             // if the file blueprint does not point to an existing file, do nothing.
             if (!System.IO.File.Exists(Path)) return;

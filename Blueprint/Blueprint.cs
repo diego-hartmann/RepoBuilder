@@ -110,11 +110,12 @@ namespace RepoBuilder
 
         #region =========================- INTERNAL METHODS -=======================================================
         /// <summary> Specifies if the real file or folder exists based on this directory's of file's Path readonly string. </summary>
-        internal abstract void CheckForExistence();
+        internal abstract void CheckIfPointsToExistingContent();
       
         /// <summary> Creates the real file. </summary>
         internal void Build()
         {
+            Unbuild();
             unbuildLocation = Location;
             unbuildName = Name;
             OnBuild();

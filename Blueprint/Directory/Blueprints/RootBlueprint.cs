@@ -32,7 +32,6 @@ namespace RepoBuilder
 
 
 
-
         #region ===========- PUBLIC PROPERTIES -==============================================
         public override string Location
         {
@@ -48,9 +47,6 @@ namespace RepoBuilder
             }
         }
         #endregion ___________________________________________________________________________
-
-
-
 
 
 

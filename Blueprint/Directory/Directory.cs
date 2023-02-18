@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -110,6 +111,9 @@ namespace RepoBuilder
             content.DirectoryParent = this;
             contentToBuild.Add(content);
             contentToUnbuild.Remove(content);
+
+            // then, see if this blueprint points to an existing content.
+            content.CheckIfPointsToExistingContent();
         }
 
         /// <summary> Removes blueprint from child list. </summary>
@@ -137,14 +141,25 @@ namespace RepoBuilder
 
 
         #region ===========- INTERNAL METHODS -===================================================
-        internal override void CheckForExistence()
+        internal override void CheckIfPointsToExistingContent()
         {
             string _path = $"{Path}/";
 
-            // if the Root does not exist, don't do anything.
-            if (!Helper.CheckForSelfExistence(_path)) return;
+            // if this blueprint does not point to an existing directory, don't do anything.
+            if(!Helper.CheckForSelfExistence(_path)) return;
 
-            // otherwise, check if its content exists too.
+            // otherwise, tell the algorithm this directory is already built
+            IsBuilt = true;
+
+            if(this is FolderBlueprint) // can not be added if is Root
+            { 
+                // create a blueprint for it,
+                var newBlueprint = new FolderBlueprint(Name);
+                // and add it to the parent list.
+                DirectoryParent.Add(newBlueprint);
+            }
+            
+            // now, check if its real content exists too to create blueprints inside this list.
             Helper.CheckForContentExistence(_path);
         }
         #endregion _______________________________________________________________________________
@@ -163,9 +178,11 @@ namespace RepoBuilder
         {
             System.IO.Directory.CreateDirectory(Path);
 
-            // updates the existence of its child blueprint content list.
-            contentToBuild.ForEach(item => item.Build());
+            // deleting child content that were removed from list.
             contentToUnbuild.ForEach(item => item.Unbuild());
+
+            // building child content that were added to list.
+            contentToBuild.ForEach(item => item.Build());
         }
 
         protected override void OnUnbuild()
@@ -187,7 +204,7 @@ namespace RepoBuilder
             ConstructorForFolder(name);
             Location = location;
             unbuildLocation = location;
-            CheckForExistence();
+            CheckIfPointsToExistingContent();
         }
         #endregion _______________________________________________________________________________
     }
