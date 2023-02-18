@@ -106,13 +106,17 @@ namespace RepoBuilder
 
             // if it is a document...
             if(content is DocumentBlueprint) {
+                
+                var docBlueprint = (content as DocumentBlueprint);
+                
                 // compare to the existing ones,
                 foreach (var item in DocumentList)
                 {
-                    bool sameName = item.Name == content.Name;
-                    bool sameExtention = item.Extention == (content as DocumentBlueprint).Extention;
-                    // and if maches the same assignature, do nothing.
-                    if (sameName && sameExtention) return;
+                    bool sameName = item.Name == docBlueprint.Name;
+                    bool sameExtention = item.Extention == docBlueprint.Extention;
+                    bool sameContent = item.Content == docBlueprint.Content;
+                    // and if maches the same assignature, check for content.
+                    if (sameName && sameExtention && sameContent) return;
                 }
             }
             
