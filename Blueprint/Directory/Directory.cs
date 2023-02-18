@@ -107,25 +107,25 @@ namespace RepoBuilder
             // if it is a document...
             if(content is DocumentBlueprint) {
                 // compare to the existing ones,
-                DocumentList.ForEach( item =>
+                foreach (var item in DocumentList)
                 {
                     bool sameName = item.Name == content.Name;
                     bool sameExtention = item.Extention == (content as DocumentBlueprint).Extention;
                     // and if maches the same assignature, do nothing.
                     if (sameName && sameExtention) return;
-                });
+                }
             }
             
             // if it is a folder...
             if (content is FolderBlueprint)
             {
                 // compare to the existing ones,
-                FolderList.ForEach( item =>
+                foreach (var item in FolderList)
                 {
                     bool sameName = item.Name == content.Name;
                     // and if maches the same assignature, do nothing.
                     if (sameName) return;
-                });
+                }
             }
 
             // does not add Root since it must not be a child.
