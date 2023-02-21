@@ -73,11 +73,11 @@ namespace RepoBuilder
         #region ===========- PUBLIC METHODS -=============================================================
         /// <summary> Adds text to the Content property. </summary>
         /// <param name="content">The content string to be added.</param>
-        public void AddContent(string content) => Content += content;
+        public void Write(string content) => Content += content;
 
         /// <summary> Adds text line to the Content property. </summary>
         /// <param name="content">The content string line to be added.</param>
-        public void AddContentLine(string content)
+        public void WriteLine(string content)
         {
             // if there is any content inside Content string...
             if (Content.Length > 0)
@@ -88,6 +88,22 @@ namespace RepoBuilder
             }
 
             // otherwise, it will just sums on the Content without leaving the first line blank by braking it.
+            Content += content;
+        }
+
+        /// <summary> Adds text line to the begining of the Content property. </summary>
+        /// <param name="content">The content string line to be added.</param>
+        public void WriteLineOnTop(string content)
+        {
+            // if there is any content inside Content string...
+            if (Content.Length > 0)
+            {
+                // it will break the last written line.
+                Content = $"{content}\n" + Content;
+                return;
+            }
+
+            // otherwise, it will just sums on the Content without leaving the second line blank by braking it.
             Content += content;
         }
 
@@ -119,7 +135,7 @@ namespace RepoBuilder
                 fileReader.Close();
 
                 // fill the blueprint Content property with the real file content string,
-                AddContent(fileContent);
+                Write(fileContent);
             }
 
             // and tell the algorithm that this blueprint is already built.

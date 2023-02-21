@@ -29,7 +29,7 @@
             NumberOfCopies++;
             string newName = $"{Name}_{NumberOfCopies}";
             DocumentBlueprint duplication = new DocumentBlueprint(newName, Extention);
-            duplication.AddContent(Content);
+            duplication.Write(Content);
             return duplication;
         }
         #endregion _______________________________________________________________________________________

@@ -91,7 +91,7 @@ namespace RepoBuilder
                     reader.Close();
 
                     // add that saved content string into the blueprint content.
-                    doc.AddContent(fileContent);
+                    doc.Write(fileContent);
                 }
 
                 // add it to the list of its parent.
