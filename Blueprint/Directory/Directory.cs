@@ -110,13 +110,18 @@ namespace RepoBuilder
                 var docBlueprint = (content as DocumentBlueprint);
                 
                 // compare to the existing ones,
-                foreach (var item in DocumentList)
+                foreach (var existingItem in DocumentList)
                 {
-                    bool sameName = item.Name == docBlueprint.Name;
-                    bool sameExtention = item.Extention == docBlueprint.Extention;
-                    bool sameContent = item.Content == docBlueprint.Content;
+                    bool sameName = existingItem.Name == docBlueprint.Name;
+                    bool sameExtention = existingItem.Extention == docBlueprint.Extention;
+                    bool sameContent = existingItem.Content == docBlueprint.Content;
+                    
                     // and if maches the same assignature, check for content.
-                    if (sameName && sameExtention && sameContent) return;
+                    if (sameName && sameExtention) {
+                        if (sameContent) return;
+                        // if they have different content written inside, opt for the newer one (just added).
+                        Remove(existingItem);
+                    }
                 }
             }
             
@@ -170,14 +175,14 @@ namespace RepoBuilder
             //string _path = $"{Path}/";
             string _path = Path;
 
-            // if this blueprint does not point to an existing directory, don't do anything.
-            if(!Helper.CheckForSelfExistence(_path)) return;
+            // if this Root blueprint does not point to an existent directory, does nothing.
+            if (!System.IO.Directory.Exists(_path)) return;
 
-            // otherwise, tell the algorithm this directory is already built
+            // otherwise, tell the algorithm that the Root is already built,
             IsBuilt = true;
 
             // can only be added into list if is not Root directory, but a Folder directory.
-            if(this is FolderBlueprint)
+            if (this is FolderBlueprint)
             { 
                 // create a blueprint for it,
                 var newBlueprint = new FolderBlueprint(Name);
@@ -185,7 +190,7 @@ namespace RepoBuilder
                 DirectoryParent.Add(newBlueprint);
             }
             
-            // now, check there is any real content inside it to create blueprints inside this list.
+            // now, check if there is any real content inside it to create and add blueprints inside its list.
             Helper.CheckForContentExistence(_path);
         }
         #endregion _______________________________________________________________________________

@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RepoBuilder
 {
@@ -34,20 +32,6 @@ namespace RepoBuilder
 
 
         #region ===========- PREVIOUS EXISTENCE METHODS -=========================================
-        /// <summary> Specifies if the this directory blueprint points to an existing directory. </summary>
-        /// <param name="_path">Sanitized directory path</param>
-        /// <returns>True if blueprint points to an existing directory.</returns>
-        internal bool CheckForSelfExistence(string _path)
-        {
-            // if this Root blueprint does not point to an existent directory, returns false.
-            if (!System.IO.Directory.Exists(_path)) return false;
-
-            // otherwise, tell the algorithm that the Root is already built...
-            Caller.IsBuilt = true;
-
-            // ...and return true.
-            return true;
-        }
 
         /// <summary>
         /// Creates or updates the contents' blueprints list inside it,
@@ -96,9 +80,6 @@ namespace RepoBuilder
 
                 // add it to the list of its parent.
                 Caller.Add(doc);
-
-                //// tell the algorithm that this file blueprint is already built.
-                //doc.IsBuilt = true;
 
             }
         }
