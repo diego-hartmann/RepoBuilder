@@ -12,7 +12,7 @@ namespace RepoBuilder
             Name = name;
             Extention = extention;
             unbuildName = name;
-            unbuildFileExtentionText = extention.ToExtentionString();
+            unbuildFileExtentionText = Extention.ToExtentionString();
         }
         #endregion ______________________________________________________________________________________
 
@@ -168,7 +168,7 @@ namespace RepoBuilder
         }
 
         // using the update UnbuildPath to delete the last version of the file
-        protected override void OnUnbuild()=> System.IO.File.Delete(UnbuildPath);
+        // protected override void OnUnbuild()=> System.IO.File.Delete(UnbuildPath);
         #endregion _______________________________________________________________________________________
 
     }

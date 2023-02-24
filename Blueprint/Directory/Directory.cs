@@ -199,13 +199,8 @@ namespace RepoBuilder
             contentToBuild.ForEach(item => item.Build());
         }
 
-        protected override void OnUnbuild()
-        {
-            System.IO.Directory.Delete(UnbuildPath, true);
+        //protected override void OnUnbuild() => System.IO.Directory.Delete(UnbuildPath, true);
 
-            // tell the algorithm that the content list is not builded anymore.
-            ContentList.ForEach( item => item.IsBuilt = false );
-        }
 
         protected void ConstructorForFolder(string name)
         {

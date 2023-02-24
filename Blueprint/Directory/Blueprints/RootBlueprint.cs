@@ -20,7 +20,7 @@ namespace RepoBuilder
         /// <param name="name">Name for the real directory. </param>
         /// <param name="location">Location string path that the root will be built in.</param>
         public RootBlueprint(string name, string location) => ConstructorForRoot(name, location);
-        
+
         /// <summary> Returns a new Root object. </summary>
         /// <param name="name">Name for the real directory. </param>
         /// <param name="location">Location enum path that the Root will be built in.</param>
@@ -62,11 +62,28 @@ namespace RepoBuilder
 
 
 
+
+
+
         #region ===========- PUBLIC METHODS -=================================================
         /// <summary> Moves the Root into another location. </summary>
         /// <param name="location">The new location.</param>
         public void MoveTo(string location) => Location = location;
         public void MoveTo(Location location) => Location = location.ToLocationString();
+        #endregion ___________________________________________________________________________
+
+
+
+
+
+
+
+
+        #region ===========- PROTECTED METHODS -==============================================
+        protected override void OnUnbuild() {
+            System.IO.Directory.Delete(UnbuildPath, true);
+            foreach (var content in ContentList) content.Unbuild();
+        }
         #endregion ___________________________________________________________________________
 
 

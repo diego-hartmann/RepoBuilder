@@ -83,7 +83,7 @@ namespace RepoBuilder
 
         #region =========================- PROTECTED METHODS -====================================================
         /// <summary> Event to be called when the Root is about to unbuild. </summary>
-        protected abstract void OnUnbuild();
+        protected virtual void OnUnbuild() { }
 
         /// <summary> Event to be called when the Root is about to build. </summary>
         protected abstract void OnBuild();
