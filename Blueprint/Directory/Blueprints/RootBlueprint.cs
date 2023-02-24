@@ -32,7 +32,7 @@ namespace RepoBuilder
 
 
 
-        #region =========================- PROTECTED PROPERTIES -==================================================
+        #region =========================- PRIVATE FIELDS -========================================================
         private string location = String.Empty;
         #endregion ________________________________________________________________________________________________
 
@@ -51,7 +51,6 @@ namespace RepoBuilder
                 StringBuilder _value = new StringBuilder(value);
                 _value.Replace("\\", "/");
                 _value.Replace("//", "/");
-                _value.Replace("/", "/");
                 location = _value.ToString();
             }
         }

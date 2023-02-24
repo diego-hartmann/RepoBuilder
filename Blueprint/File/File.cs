@@ -82,18 +82,23 @@ namespace RepoBuilder
         /// <param name="content">The content string line to be added.</param>
         public void WriteLine(string content)
         {
-            // if there is no content inside it,
+            //// if there is no content inside it,
+            //if (Content == "")
+            //{
+            //    // it will just sums on the Content without leaving the first line blank by braking it.
+            //    Content += content;
+            //    return;
+            //}
+
+            //// otherwise, it will break the last written line.
+            //Content += $"\n{content}";
             if (Content == "")
             {
-                // it will just sums on the Content without leaving the first line blank by braking it.
-                Content += content;
+                Write(content);
                 return;
             }
+            Write($"\n{content}");
 
-            // otherwise, it will break the last written line.
-            Content += $"\n{content}";
-            return;
-            
         }
 
         /// <summary> Adds text line to the begining of the Content property. </summary>
@@ -142,6 +147,7 @@ namespace RepoBuilder
                 fileReader.Close();
 
                 // fill the blueprint Content property with the real file content string,
+                this.ClearContent();
                 Write(fileContent);
             }
 

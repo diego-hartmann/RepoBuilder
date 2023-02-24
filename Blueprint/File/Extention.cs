@@ -5,7 +5,7 @@ namespace RepoBuilder
     /// <summary> 
     /// Extention type of the file.
     /// Edit it as you see fit.
-    /// Just don't forget to update the ToExtentionString and ToExtentionEnum methods as well.
+    /// Just don't forget to update the IDictionary as well.
     /// </summary>
     public enum Extention { CSharp, HTML, CSS, JavaScript, Text, Bat, Python, Markdown, None }
 
@@ -13,13 +13,12 @@ namespace RepoBuilder
     internal static class EnumToString
     {
 
-
-        private static T KeyByValue<T, W>(this IDictionary<T, W> dict, W val)
+        private static string KeyByValue(this IDictionary<string, Extention> dict, Extention val)
         {
-            T key = default;
-            foreach (KeyValuePair<T, W> pair in dict)
+            string key = default;
+            foreach (KeyValuePair<string, Extention> pair in dict)
             {
-                if (EqualityComparer<W>.Default.Equals(pair.Value, val))
+                if (EqualityComparer<Extention>.Default.Equals(pair.Value, val))
                 {
                     key = pair.Key;
                     break;
@@ -48,23 +47,7 @@ namespace RepoBuilder
         /// </summary>
         /// <param name="extentionValue">The enum value to be converted.</param>
         /// <returns></returns>
-        public static string ToExtentionString(this Extention extentionValue)
-        {
-            return extentionDic.KeyByValue(extentionValue);
-
-            //switch (extentionValue)
-            //{
-            //    case Extention.CSharp: return "cs";
-            //    case Extention.HTML: return "html";
-            //    case Extention.CSS: return "css";
-            //    case Extention.JavaScript: return "js";
-            //    case Extention.Text: return "txt";
-            //    case Extention.Bat: return "bat";
-            //    case Extention.Python: return "py";
-            //    case Extention.Markdown: return "md";
-            //    default: return "";
-            //}
-        }
+        public static string ToExtentionString(this Extention extentionValue) => extentionDic.KeyByValue(extentionValue);
 
 
         /// <summary>
@@ -73,22 +56,6 @@ namespace RepoBuilder
         /// </summary>
         /// <param name="extentionValue">The enum value to be converted.</param>
         /// <returns></returns>
-        public static Extention ToExtentionEnum(this string extention)
-        {
-            return extentionDic[extention];
-
-            //switch (extention)
-            //{
-            //    case "cs": return Extention.CSharp;
-            //    case "html": return Extention.HTML;
-            //    case "css": return Extention.CSS;
-            //    case "js": return Extention.JavaScript;
-            //    case "txt": return Extention.Text;
-            //    case "bat": return Extention.Bat;
-            //    case "py": return Extention.Python;
-            //    case "md": return Extention.Markdown;
-            //    default: return Extention.None;
-            //}
-        }
+        public static Extention ToExtentionEnum(this string extention) => extentionDic[extention];
     }
 }
