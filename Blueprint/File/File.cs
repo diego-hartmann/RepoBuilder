@@ -51,7 +51,7 @@ namespace RepoBuilder
             }
         }
 
-        /// <summary> Complete path of the file, including location, name and extention (readonly). </summary>
+        /// summary> Complete path of the file, including location, name and extention (readonly). </summary>
         public override string Path => $"{Location}/{Name}.{fileExtentionText}";
 
         /// <summary> Complete path of the old file, including location, name and extention (readonly). </summary>
@@ -71,6 +71,9 @@ namespace RepoBuilder
 
 
         #region ===========- PUBLIC METHODS -=============================================================
+        /// <summary> Adds a break. </summary>
+        public void BreakLine() => Content += "\n";
+
         /// <summary> Adds text to the Content property. </summary>
         /// <param name="content">The content string to be added.</param>
         public void Write(string content) => Content += content;
@@ -79,36 +82,40 @@ namespace RepoBuilder
         /// <param name="content">The content string line to be added.</param>
         public void WriteLine(string content)
         {
-            // if there is any content inside Content string...
-            if (Content.Length > 0)
+            // if there is no content inside it,
+            if (Content == "")
             {
-                // it will break the last written line.
-                Content += $"\n{content}";
+                // it will just sums on the Content without leaving the first line blank by braking it.
+                Content += content;
                 return;
             }
 
-            // otherwise, it will just sums on the Content without leaving the first line blank by braking it.
-            Content += content;
+            // otherwise, it will break the last written line.
+            Content += $"\n{content}";
+            return;
+            
         }
 
         /// <summary> Adds text line to the begining of the Content property. </summary>
         /// <param name="content">The content string line to be added.</param>
         public void WriteLineOnTop(string content)
         {
-            // if there is any content inside Content string...
-            if (Content.Length > 0)
+            // if there is no content inside it,
+            if (Content == "" || Content == string.Empty || Content == null)
             {
-                // it will break the last written line.
-                Content = $"{content}\n" + Content;
+                // it will just sums on the Content without leaving the second line blank by braking it.
+                Content += content;
                 return;
             }
+            
+            // otherwise, it will break the last written line.
+            Content = $"{content}\n" + Content;
+            return;
 
-            // otherwise, it will just sums on the Content without leaving the second line blank by braking it.
-            Content += content;
         }
 
         /// <summary> Makes Content property empty. </summary>
-        public void ClearContent() => Content = string.Empty;
+        public void ClearContent() => Content = "";
         #endregion _______________________________________________________________________________________
 
 
@@ -146,10 +153,12 @@ namespace RepoBuilder
         {
             // updating the unbuild extention text field.
             this.unbuildFileExtentionText = this.fileExtentionText;
-            
+
+
             // instantiating readonly IDisposable object to operate on it.
-            using(StreamWriter writer = new StreamWriter(Path, false)){
-                
+            using (StreamWriter writer = new StreamWriter(Path, false))
+            {
+
                 // writing the real file content based on the blueprint's Content string.
                 writer.Write(Content);
 

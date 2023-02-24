@@ -25,35 +25,23 @@ namespace RepoBuilder
 
 
 
-        #region =========================- PROTECTED PROPERTIES -==================================================
-        protected string location = String.Empty;
-        #endregion ________________________________________________________________________________________________
-
-
-
-
-
-
-
-
-
         #region =========================- PUBLIC GET{} PROPERTIES -===============================================
         /// <summary> Specifies if this content is currently mounted with the Build method. </summary>
         public bool IsBuilt { get; internal set; }
 
-        /// <summary> Specifies if this file has folder parent. </summary>
+        /// <summary> Specifies if this blueprint has folder parent. </summary>
         public bool HasDirectoryParent => DirectoryParent != null;
 
-        /// <summary> The folder parent of the file. </summary>
+        /// <summary> The folder parent of the blueprint. </summary>
         public Directory DirectoryParent { get; internal set; }
 
-        /// <summary> Location of the file. </summary>
-        public virtual string Location { get => DirectoryParent?.Path ?? null; protected set { } }
+        /// <summary> Location of the blueprint. </summary>
+        public virtual string Location { get => DirectoryParent?.Path ?? ""; protected set { } }
 
-        /// <summary> Name of the file. </summary>
+        /// <summary> Name of the blueprint. </summary>
         public string Name { get; protected set; }
 
-        /// <summary> Complete path of the file, including location, name and extention. </summary>
+        /// <summary> Complete path of the blueprint, including location and name (and extention if is a file). </summary>
         public abstract string Path { get; }
 
         #endregion ________________________________________________________________________________________________

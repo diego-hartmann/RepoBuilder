@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace RepoBuilder
 {
@@ -50,21 +46,8 @@ namespace RepoBuilder
 
 
         #region ===========- PUBLIC PROPERTIES -=================================================
-        public override string Location
-        {
-            get => DirectoryParent?.Path ?? null;
 
-            protected set
-            {
-                StringBuilder _value = new StringBuilder(value);
-                _value.Replace("\\", "/");
-                _value.Replace("//", "/");
-                _value.Replace("/", "/");
-                location = _value.ToString();
-            }
-        }
-
-        public override string Path => $"{Location}/{Name}" ?? null;
+        public override string Path => $"{Location}/{Name}";
 
         /// <summary> List of child document blueprints. </summary>
         public List<DocumentBlueprint> DocumentList => ContentList.Filter<DocumentBlueprint>();
@@ -126,7 +109,7 @@ namespace RepoBuilder
             }
             
             // if it is a folder...
-            if (content is FolderBlueprint)
+            else if (content is FolderBlueprint)
             {
                 // compare to the existing ones,
                 foreach (var item in FolderList)

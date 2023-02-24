@@ -1,16 +1,16 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace RepoBuilder
 {
 
     /// <summary>
-    /// The root directory. It contains the Build and Unbuild method.
+    /// The root directory. It contains the Build and Unbuild method by extention.
     /// Those methods will build or unbuild its content (files or subfolders).
-    /// Can not be moved
+    /// Can not be moved into another blueprint.
     /// </summary>
     public class RootBlueprint : Directory
     {
-
 
 
 
@@ -26,6 +26,15 @@ namespace RepoBuilder
         /// <param name="location">Location enum path that the Root will be built in.</param>
         public RootBlueprint(string name, Location location) => ConstructorForRoot(name, location.ToLocationString());
         #endregion ___________________________________________________________________________
+
+
+
+
+
+
+        #region =========================- PROTECTED PROPERTIES -==================================================
+        private string location = String.Empty;
+        #endregion ________________________________________________________________________________________________
 
 
 

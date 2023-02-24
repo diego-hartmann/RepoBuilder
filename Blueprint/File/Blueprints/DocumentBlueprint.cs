@@ -19,8 +19,6 @@
 
 
 
-
-
         #region ===========- PUBLIC METHODS -===============================================================
         /// <summary> Creates another document blueprint based on this. </summary>
         /// <returns>Returns a new object with the same properties.</returns>
