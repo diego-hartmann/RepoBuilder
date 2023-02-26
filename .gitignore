@@ -13,7 +13,7 @@
 *.sln.docstates
 
 # Build results
-[Dd]ebug/
+# [Dd]ebug/ --> allowing so dll can be accessed
 [Rr]elease/
 x64/
 # [Bb]in/ -> allow dll to be shown so users can download it.

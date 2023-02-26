@@ -17,7 +17,7 @@ It is a virtual file or folder that can be edited before being really created in
 
 There are 3 (three) types (sub-classes) derived from the Blueprint class, which are:
 
-## 1. RootBlueprint type
+## 1. RootBlueprint
 - Creates the blueprint of the root directory using the RootBlueprint constructor. 
 ```cs
 var root = new RootBlueprint("MyRepoName", "c:/users/{userName}/desktop");
@@ -52,59 +52,30 @@ root.Build(); // creating or updating existing folder.
 root.Build(); // updating the folder with the new changes.
 ```
 
-## 4. DocumentBlueprint object members
-Modify the blueprint object using its methods and public properties.
+## 2. FolderBlueprint
+- Creates the blueprint of any sub directory using the FolderBlueprint constructor. 
 ```cs
-fileBP.AddContentLine("const app = data => console.log(data);");
+var folder = new FolderBlueprint("Folder");
 ```
+- You might want to add it into the root directory.
 ```cs
-fileBP.AddContentLine("app();");
-``` 
-```cs
-fileBP.Location = "c:/users/username/favorites";
-```
-```cs
-fileBP.Location = Folder.Favorites.ToLocationString();
+root.Add(folder);
+//or
+folder.MoveTo(root);
 ```
 
-## 5. Creating new file
-You mount the new file (or rewrite the existing one) through the Build method.
+## 3. DocumentBlueprint
+- Creates the blueprint of any document using the DocumentBlueprint constructor. 
 ```cs
-fileBP.Build();
+// creating python file
+var PY = new DocumentBlueprint("Doc_PY", Extention.Python);
+// creating javascript file
+var JS = new DocumentBlueprint("Doc_JS", Extention.JavaScript);
 ```
-
-## 6. Updating existing file
-Just call the Build method whenever you want within your code.
-- It will save the new changes into the existing file or create it anyways.
+- You might want to add them into the any folder you see fit.
 ```cs
-fileBP.ClearContent();
-fileBP.Build();
-```
-
-## 7. Deleting existing file
-You unmount the real file through the Unbuild method.
-- It DOES NOT delete the blueprint object.
-- The existence of the real file is checked inside Unbuild method... 
-- ... so don't worry if you try to unbuild an inexisting file.
-```cs
-fileBP.Unbuild();
-```
-
-## 8. Cloning blueprint objects
-GetCopy method is a quick way to create a new blueprint.
-- Adds a copy number after the original name ("MyFileName_1").
-```cs
-FileBlueprint fileBPCopy = fileBP.GetCopy();
-```
-- But you can change the Name property later anyways, just like any other one.
-```cs
-fileBPCopy.Name = "NewName";
-fileBPCopy.ClearContent();
-fileBPCopy.AddContentLine("I am a copy!");
-fileBPCopy.Build();
-```
-- If you delete the original blueprint, the copy will not be affected.
-```cs
-fileBP.Unbuild();
-Console.Write(fileBPCopy.Content);
+// adding python file into root
+root.Add(PY);
+// adding javascript file into root subfolder
+folder.Add(JS);
 ```
