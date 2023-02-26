@@ -27,8 +27,8 @@ var root = new RootBlueprint("MyRepoName", "c:/users/{userName}/desktop");
 var root = new RootBlueprint("MyRepoName", Location.Desktop);
 ```
 - This is the only Blueprint that implements the extention methods Build() and Unbuild().
-- The Build method mounts the real repository into your local machine.
-- It also mounts all of its inner content (folders and documents blueprints).
+- The Build() method mounts the real repository into your local machine.
+- It also mounts all of its inner contents (folders and documents blueprints added to its content list).
 ```cs
 root.Build(); // creating
 ```
