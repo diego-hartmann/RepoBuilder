@@ -16,7 +16,7 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
-[Bb]in/
+# [Bb]in/ -> allow dll to be shown so users can download it.
 [Oo]bj/
 # build folder is nowadays used for build scripts and should not be ignored
 #build/
@@ -115,7 +115,6 @@ AppPackages/
 
 # Others
 *.Cache
-ClientBin/
 [Ss]tyle[Cc]op.*
 ~$*
 *~
