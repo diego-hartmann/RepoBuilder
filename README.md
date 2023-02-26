@@ -72,6 +72,18 @@ var PY = new DocumentBlueprint("Doc_PY", Extention.Python);
 // creating javascript file
 var JS = new DocumentBlueprint("Doc_JS", Extention.JavaScript);
 ```
+- Add text content inside any document. 
+```cs
+JS.WriteLine("import React from 'react';");
+JS.WriteLine("const App = props => <div> {props.title} </div>;");
+JS.WriteLine("export { App };");
+JS.Write(@"
+    function helper(parameter){
+        console.log(parameter.toString());
+    }
+    export { helper };
+");
+```
 - You might want to add them into the any folder you see fit.
 ```cs
 // adding python file into root
