@@ -1,3 +1,6 @@
+# Introduction
+[Youtube tutorial](https://www.youtube.com/playlist?list=PLZFUL050KiAmBiiz4UsIXghblFbOaja2L)
+[See slides](https://drive.google.com/drive/folders/1qsDnCVjjpoVFMoGbE0Qk_zWHBG59V_ed?usp=share_link)
 # RepoBuilder 📁
 ## 1. [Download](https://github.com/diego-hartmann/RepoBuilder/raw/main/bin/Debug/RepoBuilder.dll) the .dll
 1. C# library for creating files with a high level of abstraction and security.
